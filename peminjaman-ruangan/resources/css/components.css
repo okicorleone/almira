@@ -1,0 +1,112 @@
+/* Font + token warna dari Figma */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+
+@layer base {
+  :root{
+    --panel-gray:#BEBEBE;   /* abu panel */
+    --accent:#ED1C24;       /* merah judul */
+    --btn-gray:#666666;     /* tombol login */
+  }
+  body{ @apply font-[Poppins]; }
+}
+
+/* ---- Komponen reusable ---- */
+@layer components {
+  /* Layar penuh, center, boleh scroll kalau tinggi kurang */
+  .desktop-center{
+    width: 100dvw;
+    height: 100dvh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;          /* matikan scroll */
+    background: #F1F2F4;
+
+    /* faktor skala 0.1..1 (jangan membesar di layar besar) */
+    --s: clamp(0.1,
+              min(calc(100dvw / 1440), calc(100dvh / 900)),
+              1);
+  }
+  /* Kontainer 2 panel */
+  .login-wrap{
+    @apply w-[1000px] h-[600px] relative overflow-hidden rounded-[123px]
+           flex items-center justify-start gap-[81px] p-8;
+    background:var(--panel-gray);
+    box-shadow:0 8px 13px rgba(0,0,0,.25),
+               inset -1px -3px 4px rgba(255,255,255,.4),
+               inset 4px 5px 6px rgba(255,255,255,.4);
+  }
+  .login-wrap::before{ content:""; position:absolute; inset:0; border-radius:123px; background:rgba(255,255,255,.08); backdrop-filter:blur(3px); }
+
+  .left-pane{
+    @apply relative z-[1] w-[500px] h-[500px] p-10 rounded-[123px] bg-white;
+    box-shadow:inset -1px -3px 4px rgba(255,255,255,.4),
+               inset 4px 5px 6px rgba(255,255,255,.4),
+               0 8px 13px rgba(0,0,0,.25);
+  }
+
+  .right-pane{ @apply relative z-[1] w-[513px] p-2; }
+
+  .notice-title{ @apply text-[32px] font-extrabold uppercase tracking-[0.005em] text-[var(--accent)] mb-3; }
+  .notice-lead { @apply text-[17px] leading-[140%] mb-3; }
+  .notice-list { @apply text-[17px] leading-[150%] list-decimal pl-5 space-y-2; }
+
+  .brand-title{ @apply text-[48px] font-semibold text-[#6B6B6B] leading-[1.1]; }
+  .brand-sub  { @apply text-[14px] text-[var(--accent)] font-semibold -mt-1; }
+
+  .field{ position:relative; width:450px; }
+  .field-label{ @apply text-[13px] font-semibold text-[#7a7a7a] mb-1 ml-[6px]; }
+  .neo-field{ @apply w-[450px] h-[60px] relative rounded-[123px] mb-4;
+    box-shadow:inset -1px -3px 4px rgba(255,255,255,.4),
+               inset 4px 5px 6px rgba(255,255,255,.4),
+               0 8px 13px rgba(0,0,0,.25);
+  }
+  .neo-inner{ @apply absolute inset-0 rounded-[10px] bg-[var(--panel-gray)] flex items-center justify-between px-[18px];
+    box-shadow: inset 0 3px 6px rgba(255,255,255,.45), inset 0 -1px 0 rgba(0,0,0,.35);
+  }
+  .neo-input{ @apply flex-1 bg-transparent outline-none text-[16px] font-semibold text-[#252525] placeholder-[#252525]; }
+  .neo-ico  { @apply h-[20px] w-[20px] text-[#252525]; }
+
+  .btn-wrap{ @apply relative mt-5; }
+  .neo-btn{
+    @apply w-[236px] h-[49px] inline-flex items-center justify-center rounded-[18px] text-white font-semibold text-[28px];
+    background:var(--btn-gray);
+    box-shadow:0 8px 13px rgba(0,0,0,.25), inset -1px -3px 4px rgba(255,255,255,.4), inset 4px 5px 6px rgba(255,255,255,.4);
+  }
+
+
+  .login-copy{ @apply absolute bottom-[20px] left-1/2 -translate-x-1/2 text-[16px]; }
+
+  /* Kanvas 1440×900 yang auto-scale supaya selalu kelihatan utuh */
+  .scale-wrap{
+    inline-size: calc(1440px * var(--s));
+    block-size:  calc(900px  * var(--s));
+    transform: scale(var(--s));
+    transform-origin: top center;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Kanvas asli (ukuran referensi Figma) */
+  .desktop-canvas{
+    width: 1080px;
+    height: 900px;             /* ubah ke 1080 kalau figma 1440×1080 */
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  
+  @media (max-width: 1440px), (max-height: 900px){
+    .desktop-canvas{
+      --sx: calc(100vw / 1440);
+      --sy: calc(100vh / 900);
+      transform: scale( min(var(--sx), var(--sy)) );
+  }
+
+  /* Pembungkus tetap boleh scroll vertikal kalau tinggi kurang */
+  .desktop-center{
+    width: 100vw; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: auto; /* jaga-jaga */
+    background: #F1F2F4;
+  }
+
+}
+}
