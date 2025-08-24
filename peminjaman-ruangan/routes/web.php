@@ -3,9 +3,18 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        // Kalau admin
+        if (Auth::user()->role === 'admin') {
+            return redirect('/admin/dashboard');
+        }
+        // Kalau user biasa
+        return redirect('/dashboard');
+    }
+    return redirect('/login');
 });
 
 // Dashboard untuk User (bukan admin)
