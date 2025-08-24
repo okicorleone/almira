@@ -1,60 +1,57 @@
 <x-guest-layout>
-  <div class="desktop-center">
-    <div class="scale-wrap">
-    <div class="desktop-canvas">
-      <div class="login-wrap">
-        {{-- PANEL KIRI --}}
-        <div class="left-pane">
-          <img src="/img/infomedialogo.png" class="h-10 w-auto mb-6" alt="infomedia">
-          <h2 class="notice-title">REGISTRATION NOTICE</h2>
-          <p class="notice-lead">Untuk menjaga ketertiban data pengguna, registrasi akun hanya dilakukan melalui admin resmi. Ikuti langkah berikut:</p>
-          <ol class="notice-list">
-            <li>Jika anda ingin melakukan registrasi, silahkan hubungi admin melalui <a href="#" class="font-semibold text-[#25D366] underline">WhatsApp</a> terlebih dahulu.</li>
+  <div class="min-h-screen grid place-items-center bg-[#F1F2F4] px-4 py-10">
+    <div class="w-full max-w-[1180px]">
+      <div class="almira-shell">
+
+        {{-- KIRI: REGISTRATION NOTICE (abu muda) --}}
+        <aside class="notice-card">
+          <img src="/img/infomedialogo.png" alt="Infomedia" class="h-14 w-auto mb-5">
+          <h2 class="text-[22px] font-extrabold text-[#ED1C24] uppercase tracking-wide mb-3">
+            Registration Notice
+          </h2>
+          <p class="text-[13px] text-[#232323]/85 leading-relaxed mb-3">
+            Untuk menjaga ketertiban data pengguna, registrasi akun hanya dilakukan melalui admin resmi.
+            Ikuti langkah‑langkah berikut ini:
+          </p>
+          <ol class="list-decimal pl-5 space-y-2 text-[13px] text-[#232323]/85">
+            <li>Jika anda ingin melakukan registrasi, silahkan hubungi admin melalui
+              <a href="#" class="text-[#27AE60] font-semibold">WhatsApp</a> terlebih dahulu.</li>
             <li>Jangan mengisi data sembarangan, ikuti panduan pendaftaran yang diberikan oleh admin.</li>
             <li>Jangan membuat akun lebih dari satu, gunakan satu akun resmi untuk keperluan pinjaman.</li>
             <li>Jangan mengabaikan pesan verifikasi dari admin, pastikan anda mendapat konfirmasi sebelum login.</li>
           </ol>
-        </div>
 
-        {{-- PANEL KANAN --}}
-        <div class="right-pane">
-          <div class="flex items-center gap-3 mb-6">
-            <img src="/img/almira.svg" class="h-12 w-auto" alt="">
-            <div>
-            </div>
-          </div>
+          <span class="notice-shadow"></span>
+        </aside>
 
-          <form method="POST" action="{{ route('login') }}">
+        {{-- KANAN: logo tunggal + form --}}
+        <main class="form-side">
+          <img src="/img/almira.svg" alt="Almira" class="h-[150px] w-auto mb-7 mx">
+          <form method="POST" action="{{ route('login') }}" class="w-full max-w-[420px] space-y-4">
             @csrf
-            <div class="field">
-              <div class="field-label">Username</div>
-              <div class="neo-field">
-                <div class="neo-inner">
-                  <input type="email" name="email" class="neo-input" required>
-                  <svg class="neo-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z"/></svg>
-                </div>
-              </div>
+
+            <div class="relative">
+              <input type="text" name="email" placeholder="Username" required autocomplete="username" class="almira-input">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.9 0-9 2.5-9 5.6V21h18v-1.4C21 16.5 16.9 14 12 14Z"/>
+              </svg>
             </div>
 
-            <div class="field">
-              <div class="field-label">Password</div>
-              <div class="neo-field">
-                <div class="neo-inner">
-                  <input type="password" name="password" class="neo-input" placeholder="" required>
-                  <svg class="neo-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M2.1 3.51 20.49 21.9l1.41-1.41L3.51 2.1 2.1 3.51zM12 6a9.5 9.5 0 0 1 9.17 7.18A9.52 9.52 0 0 1 17.34 18.9l-1.44-1.44A7.5 7.5 0 0 0 19.3 11 7.5 7.5 0 0 0 12 6z"/></svg>
-                </div>
-              </div>
+            <div class="relative">
+              <input type="password" name="password" placeholder="Password" required autocomplete="current-password" class="almira-input">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M3.11 3.51 4.5 2.1l16.39 16.39-1.41 1.41-2.3-2.3A11.3 11.3 0 0 1 12 20.9C6.26 20.9 1.66 16.86.5 12 1.06 10.1 2.3 8.24 4 6.7L3.11 3.51ZM12 7.1c5.74 0 10.34 4.04 11.5 8.9-.28.95-.7 1.86-1.26 2.7l-2.4-2.4c.69-1 .96-2 .96-2.3C20.8 11.4 16.4 8 12 8c-.3 0-.6 0-.9.04L9.8 6.7c.7-.36 1.4-.6 2.2-.6Z"/>
+              </svg>
             </div>
 
-            <div class="btn-wrap">
-              <button class="neo-btn" type="submit">Login</button>
-              <div class="btn-shelf"></div>
+            <div class="flex justify-center pt-1">
+              <button type="submit" class="almira-btn">Login</button>
             </div>
           </form>
-        </div>
+        </main>
       </div>
 
-      <div class="login-copy">© 2025 infomedia</div>
+      <p class="text-center text-[#8A8A8A] text-xs mt-8">© 2025 infomedia</p>
     </div>
   </div>
 </x-guest-layout>

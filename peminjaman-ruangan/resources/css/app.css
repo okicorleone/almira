@@ -3,3 +3,5 @@
 @tailwind components;
 @tailwind utilities;
 
+/* taruh import SETELAH tailwind, biar prioritas paling tinggi */
+

@@ -1,112 +1,91 @@
-/* Font + token warna dari Figma */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
 
 @layer base {
-  :root{
-    --panel-gray:#BEBEBE;   /* abu panel */
-    --accent:#ED1C24;       /* merah judul */
-    --btn-gray:#666666;     /* tombol login */
-  }
-  body{ @apply font-[Poppins]; }
+  body { font-family: 'Poppins', ui-sans-serif, system-ui; }
 }
 
-/* ---- Komponen reusable ---- */
 @layer components {
-  /* Layar penuh, center, boleh scroll kalau tinggi kurang */
-  .desktop-center{
-    width: 100dvw;
-    height: 100dvh;
-    display: grid;
-    place-items: center;
-    overflow: hidden;          /* matikan scroll */
-    background: #F1F2F4;
-
-    /* faktor skala 0.1..1 (jangan membesar di layar besar) */
-    --s: clamp(0.1,
-              min(calc(100dvw / 1440), calc(100dvh / 900)),
-              1);
-  }
-  /* Kontainer 2 panel */
-  .login-wrap{
-    @apply w-[1000px] h-[600px] relative overflow-hidden rounded-[123px]
-           flex items-center justify-start gap-[81px] p-8;
-    background:var(--panel-gray);
-    box-shadow:0 8px 13px rgba(0,0,0,.25),
-               inset -1px -3px 4px rgba(255,255,255,.4),
-               inset 4px 5px 6px rgba(255,255,255,.4);
-  }
-  .login-wrap::before{ content:""; position:absolute; inset:0; border-radius:123px; background:rgba(255,255,255,.08); backdrop-filter:blur(3px); }
-
-  .left-pane{
-    @apply relative z-[1] w-[500px] h-[500px] p-10 rounded-[123px] bg-white;
-    box-shadow:inset -1px -3px 4px rgba(255,255,255,.4),
-               inset 4px 5px 6px rgba(255,255,255,.4),
-               0 8px 13px rgba(0,0,0,.25);
+  /* Panel abu besar — tanpa kotak gloss */
+  .almira-shell {
+    @apply relative flex rounded-[123px] p-8 md:p-10;
+    background: #BEBEBE;
+    box-shadow: 0 28px 50px rgba(0,0,0,.20);
+    gap: 32px;
   }
 
-  .right-pane{ @apply relative z-[1] w-[513px] p-2; }
+  /* Kartu kiri: ABU MUDA + bevel lembut */
+  .notice-card {
+  @apply relative rounded-r-[123px] p-8 md:p-10;   /* radius kiri + padding */
+  flex: 0 0 38%;
+  max-width: 38%;
+  /* samakan warna dengan shell agar menyatu */
+  background: #BEBEBE ;
 
-  .notice-title{ @apply text-[32px] font-extrabold uppercase tracking-[0.005em] text-[var(--accent)] mb-3; }
-  .notice-lead { @apply text-[17px] leading-[140%] mb-3; }
-  .notice-list { @apply text-[17px] leading-[150%] list-decimal pl-5 space-y-2; }
-
-  .brand-title{ @apply text-[48px] font-semibold text-[#6B6B6B] leading-[1.1]; }
-  .brand-sub  { @apply text-[14px] text-[var(--accent)] font-semibold -mt-1; }
-
-  .field{ position:relative; width:450px; }
-  .field-label{ @apply text-[13px] font-semibold text-[#7a7a7a] mb-1 ml-[6px]; }
-  .neo-field{ @apply w-[450px] h-[60px] relative rounded-[123px] mb-4;
-    box-shadow:inset -1px -3px 4px rgba(255,255,255,.4),
-               inset 4px 5px 6px rgba(255,255,255,.4),
-               0 8px 13px rgba(0,0,0,.25);
-  }
-  .neo-inner{ @apply absolute inset-0 rounded-[10px] bg-[var(--panel-gray)] flex items-center justify-between px-[18px];
-    box-shadow: inset 0 3px 6px rgba(255,255,255,.45), inset 0 -1px 0 rgba(0,0,0,.35);
-  }
-  .neo-input{ @apply flex-1 bg-transparent outline-none text-[16px] font-semibold text-[#252525] placeholder-[#252525]; }
-  .neo-ico  { @apply h-[20px] w-[20px] text-[#252525]; }
-
-  .btn-wrap{ @apply relative mt-5; }
-  .neo-btn{
-    @apply w-[236px] h-[49px] inline-flex items-center justify-center rounded-[18px] text-white font-semibold text-[28px];
-    background:var(--btn-gray);
-    box-shadow:0 8px 13px rgba(0,0,0,.25), inset -1px -3px 4px rgba(255,255,255,.4), inset 4px 5px 6px rgba(255,255,255,.4);
-  }
-
-
-  .login-copy{ @apply absolute bottom-[20px] left-1/2 -translate-x-1/2 text-[16px]; }
-
-  /* Kanvas 1440×900 yang auto-scale supaya selalu kelihatan utuh */
-  .scale-wrap{
-    inline-size: calc(1440px * var(--s));
-    block-size:  calc(900px  * var(--s));
-    transform: scale(var(--s));
-    transform-origin: top center;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  /* Kanvas asli (ukuran referensi Figma) */
-  .desktop-canvas{
-    width: 1080px;
-    height: 900px;             /* ubah ke 1080 kalau figma 1440×1080 */
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-  }
-  
-  @media (max-width: 1440px), (max-height: 900px){
-    .desktop-canvas{
-      --sx: calc(100vw / 1440);
-      --sy: calc(100vh / 900);
-      transform: scale( min(var(--sx), var(--sy)) );
-  }
-
-  /* Pembungkus tetap boleh scroll vertikal kalau tinggi kurang */
-  .desktop-center{
-    width: 100vw; height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    overflow: auto; /* jaga-jaga */
-    background: #F1F2F4;
-  }
-
+  /* buang semua bevel/garis atas-bawah dari rule sebelumnya */
+  border: 0 28px;
+  inset: 0 28px;
+  outline: 0 28px;
+  box-shadow: 0 28px 50px rgba(0,0,0,.20);;
 }
+
+  .notice-card h2 {
+    @apply text-[20px] font-extrabold text-[#ED1C24] uppercase mb-3;
+    line-height: 1.2;
+  }
+
+  .notice-card p {
+    @apply text-[15px] text-[#333333] mb-3 font-medium;
+    line-height: 1.5;
+  }
+
+  .notice-card ol {
+    @apply list-decimal pl-5 space-y-2 text-[15px] text-[#333333];
+  }
+
+  /* Sisi kanan */
+  .form-side {
+    @apply w-full md:w-[60%] flex flex-col items-center md:items-start justify-center;
+    padding: 48px 12px 56px 12px;
+  }
+
+  /* Input bevel (sesuai mockup) */
+  .almira-input {
+    @apply w-full h-[48px] rounded-[10px] px-4 pr-10 text-[#4B4B4B] outline-none;
+    background: #BEBEBE;
+    border: 1px solid #BEBEBE;
+    box-shadow:
+      inset 3px 3px 6px rgba(0,0,0,.18),
+      inset -3px -3px 6px rgba(255,255,255,.85);
+  }
+  .almira-input::placeholder { color: #8A8A8A; }
+  .almira-input:focus {
+    outline: 0;
+    box-shadow:
+      inset 3px 3px 6px rgba(0,0,0,.20),
+      inset -3px -3px 6px rgba(255,255,255,.88),
+      0 0 0 2px #ED1C24;
+  }
+
+  .input-icon {
+    @apply absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-[#6B6B6B];
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Tombol pil */
+.almira-btn{
+    @apply inline-flex items-center justify-center text-white font-semibold;
+    height:46px; min-width:280px; border-radius:18px;
+    background:linear-gradient(#6C6C6C,#5E5E5E);
+    box-shadow:
+      inset 0 12px 14px rgba(255,255,255,.38),
+      inset 0 -7px 14px rgba(0,0,0,.38),
+      0 12px 18px rgba(0,0,0,.28);
+}
+
+  /* Media query */
+  @media (max-width: 768px) {
+    .almira-shell { padding: 18px; gap: 16px; }
+    .form-side { padding-top: 24px; }
+  }
 }
