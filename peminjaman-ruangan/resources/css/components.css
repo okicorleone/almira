@@ -29,9 +29,10 @@
 
 
   .notice-card h2 {
-    @apply text-[20px] font-extrabold text-[#ED1C24] uppercase mb-3;
-    line-height: 1.2;
-  }
+  @apply text-[25px] font-extrabold text-[#ED1C24] uppercase mb-3 text-center !important;
+  line-height: 1.2;
+}
+
 
   .notice-card p {
     @apply text-[15px] text-[#333333] mb-3 font-medium;

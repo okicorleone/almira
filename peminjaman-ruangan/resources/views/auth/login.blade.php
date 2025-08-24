@@ -5,11 +5,11 @@
 
         {{-- KIRI: REGISTRATION NOTICE (abu muda) --}}
         <aside class="notice-card">
-          <img src="/img/infomedialogo.png" alt="Infomedia" class="h-14 w-auto mb-5">
-          <h2 class="text-[22px] font-extrabold text-[#ED1C24] uppercase tracking-wide mb-3">
+          <img src="/img/infomedialogo.png" alt="Infomedia" class="h-25 w-25 mt-5">
+          <h2 class="text-[25px] font-extrabold text-[#ED1C24] uppercase tracking-wide mt-3">
             Registration Notice
           </h2>
-          <p class="text-[13px] text-[#232323]/85 leading-relaxed mb-3">
+          <p class="text-[13px] text-[#232323]/85 leading-relaxed mb-3 ">
             Untuk menjaga ketertiban data pengguna, registrasi akun hanya dilakukan melalui admin resmi.
             Ikuti langkah‑langkah berikut ini:
           </p>
@@ -26,9 +26,13 @@
 
         {{-- KANAN: logo tunggal + form --}}
         <main class="form-side">
-          <img src="/img/almira.svg" alt="Almira" class="h-[150px] w-auto mb-7 mx">
-          <form method="POST" action="{{ route('login') }}" class="w-full max-w-[420px] space-y-4">
-            @csrf
+        <img src="/img/almira.svg" alt="Almira" class="h-[200px] w-auto mb-7 mx-auto">
+        <form
+           method="POST"
+          action="{{ route('login') }}"
+           class="w-full max-w-[480px] space-y-4 mx-auto mt-2 lg:-translate-x-6"
+   >
+    @csrf
 
             <div class="relative">
               <input type="text" name="email" placeholder="Username" required autocomplete="username" class="almira-input">
