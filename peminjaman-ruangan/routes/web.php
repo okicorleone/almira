@@ -5,6 +5,11 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+// routes/web.php
+// routes/web.php
+Route::view('/admin', 'admin.dashboard')->name('admin.dashboard');
+
+
 Route::get('/', function () {
     if (Auth::check()) {
         // Kalau admin
