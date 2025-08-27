@@ -3,37 +3,37 @@
 @tailwind components;
 @tailwind utilities;
 
-
-/* ==== Kunci scroll di page, konten saja yang scroll ==== */
+/* ---------- BASE: kunci scroll global ---------- */
 @layer base {
   html, body {
     height: 100%;
-    overflow: hidden;          /* <-- halaman utama tidak bisa scroll */
-    background: #F1F2F4;
     margin: 0;
+    background: #F1F2F4;
+    overflow: hidden;                 /* halaman utama tidak bisa scroll */
   }
 }
 
+/* ---------- COMPONENTS ---------- */
 @layer components {
+  /* Frame layar penuh: sidebar + konten (tanpa scroll) */
+  .admin-frame{
+    position: fixed;                  /* menutup seluruh viewport */
+    inset: 0;                         /* top/right/bottom/left = 0 */
+    display: flex;                    /* sidebar kiri + konten kanan */
+    overflow: hidden;                 /* jangan biarkan frame memicu scroll */
+    z-index: 0;
+  }
 
-  /* ===== Page wrapper ===== */
-  .admin-page { @apply w-full  max-w-[1180px] min-h-screen grid place-items-center bg-[#F1F2F4] px-40 py-10; }
-  
-
-  /* ===== Sidebar FIXED ===== */
+  /* Sidebar – nempel kiri/atas/bawah, radius kanan besar */
   .side{
-    position: fixed;
-    z-index: 40;
-    top: 0;
-    left: 0;
-    height: 100vh;
+    position: relative;               /* cukup relative karena .admin-frame sudah fixed */
+    flex: 0 0 300px;                  /* lebar tetap 300 */
     width: 300px;
+    height: 100%;                     /* penuh tinggi frame */
 
     padding: 22px 18px;
     color:#fff;
     background: radial-gradient(120% 120% at 20% 10%, #252525 0%, #252525 100%);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
     border-top-right-radius: 80px;
     border-bottom-right-radius: 80px;
     box-shadow:
@@ -42,7 +42,9 @@
       28px 0 60px rgba(0,0,0,.45),
       0 12px 40px rgba(0,0,0,.35);
     overflow: visible;
+    z-index: 1;
   }
+  /* Glow putih di tepi kanan sidebar */
   .side::after{
     content:"";
     position:absolute; top:12px; bottom:12px; right:-26px; width:42px;
@@ -67,24 +69,25 @@
   }
   .side-item--active .ico{ color:#3B82F6; }
 
-  /* ===== Konten: geser dan hanya konten yang scroll ===== */
+  /* Area konten — inilah yang boleh scroll */
   .content{
-    margin-left: 300px;        /* geser sejauh sidebar */
-    height: 100vh;             /* penuhi 1 viewport */
-    box-sizing: border-box;    /* padding tak nambah tinggi */
+    flex: 1 1 auto;                   /* ambil sisa lebar */
+    min-width: 0;                     /* biar flex item tidak overflow */
+    height: 100%;                     /* penuh tinggi frame */
+    box-sizing: border-box;           /* padding tidak menambah tinggi */
     padding: 24px 28px;
-    overflow: auto;            /* scroll di area ini saja */
+    overflow: auto;                   /* scroll hanya di sini */
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
   }
-  /* (opsional) scrollbar tampak rapi */
+  /* (opsional) perapihan scrollbar konten */
   .content::-webkit-scrollbar{ width: 10px; }
   .content::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.22); border-radius: 8px; }
   .content::-webkit-scrollbar-track{ background: transparent; }
 
-  /* ===== Komponen lain ===== */
+  /* Komponen kartu/typography yang sudah ada */
   .page-pill{
-    @apply text-3xl font-extrabold text-center mx-auto;
+    @apply text-3xl font-extrabold text-center mx-12 mb-auto;
     width:320px; padding:8px 16px; color:#fff;
     background:#252525; border-radius:9999px;
     box-shadow: inset 0 10px 14px rgba(255,255,255,.14),
@@ -121,14 +124,15 @@
   .kpi-value{ @apply text-3xl font-extrabold leading-tight; }
   .kpi-label{ @apply text-sm opacity-90 mt-1; }
 
-  /* Mobile: balik ke flow normal */
+  /* Mobile: balik ke flow normal (halaman boleh scroll) */
   @media (max-width:1024px){
-    html, body { overflow:auto; }    /* halaman boleh scroll di mobile */
+    html, body { overflow:auto; }
+    .admin-frame{ position: static; display:block; }
     .side{
-      position: static; width:auto; height:auto;
-      border-radius:24px; box-shadow: 0 22px 40px rgba(0,0,0,.35);
+      width:auto; height:auto; border-radius:24px;
+      box-shadow: 0 22px 40px rgba(0,0,0,.35);
     }
     .side::after{ display:none; }
-    .content{ margin-left:0; height:auto; overflow:visible; padding:16px; }
+    .content{ height:auto; overflow:visible; padding:16px; }
   }
 }
