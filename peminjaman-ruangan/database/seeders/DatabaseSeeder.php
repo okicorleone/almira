@@ -32,5 +32,10 @@ class DatabaseSeeder extends Seeder
                 'role' => 'user',
             ]
         );
+        
+        $this->call([
+            RoomsTableSeeder::class,
+            BookingsTableSeeder::class
+        ]);
     }
 }

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
+            $table->string('nama'); // Nama ruangan
+            $table->integer('lantai')->nullable(); // Posisi lantai
+            $table->text('deskripsi')->nullable(); // Deskripsi ruangan (kapasitas, fasilitas)
             $table->timestamps();
         });
     }
