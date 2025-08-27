@@ -3,42 +3,46 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* ==== Kunci scroll di page, konten saja yang scroll ==== */
+@layer base {
+  html, body {
+    height: 100%;
+    overflow: hidden;          /* <-- halaman utama tidak bisa scroll */
+    background: #F1F2F4;
+    margin: 0;
+  }
+}
+
 @layer components {
 
-  /* ===== Page wrapper (biar tidak ada padding yang mengganjal) ===== */
-  .admin-page { @apply w-full min-h-screen bg-[#F1F2F4] p-0 m-0; }
+  /* ===== Page wrapper ===== */
+  .admin-page { @apply w-full  max-w-[1180px] min-h-screen grid place-items-center bg-[#F1F2F4] px-40 py-10; }
+  
 
-  /* ===== Sidebar FIXED: nempel kiri, atas, bawah ===== */
+  /* ===== Sidebar FIXED ===== */
   .side{
-    position: fixed;           /* <<< kunci */
+    position: fixed;
     z-index: 40;
-    top: 0;                    /* nempel atas */
-    left: 0;                   /* nempel kiri */
-    height: 100vh;             /* nempel bawah */
+    top: 0;
+    left: 0;
+    height: 100vh;
     width: 300px;
 
     padding: 22px 18px;
     color:#fff;
-
-    /* gradasi gelap */
-    background: radial-gradient(120% 120% at 20% 10%, #2e2e2e 0%, #1f1f1f 65%);
-
-    /* rata kiri, rounded kanan besar */
+    background: radial-gradient(120% 120% at 20% 10%, #252525 0%, #252525 100%);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-top-right-radius: 80px;
     border-bottom-right-radius: 80px;
-
-    /* depth */
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.08),
+      inset 0 1px 0 rgba(202, 38, 38, 0.08),
       inset 0 -3px 10px rgba(0,0,0,.55),
       28px 0 60px rgba(0,0,0,.45),
       0 12px 40px rgba(0,0,0,.35);
-
     overflow: visible;
   }
-  /* glow putih di tepi kanan sidebar */
   .side::after{
     content:"";
     position:absolute; top:12px; bottom:12px; right:-26px; width:42px;
@@ -47,7 +51,6 @@
     filter: blur(14px);
     opacity:.9; pointer-events:none;
   }
-
   .side-head{ @apply flex items-center gap-3 font-semibold px-3 py-2; color:rgba(255,255,255,.9); }
   .side-nav{ @apply mt-4 space-y-3; }
   .side .ico{ width:22px; height:22px; color:rgba(255,255,255,.95); }
@@ -64,18 +67,26 @@
   }
   .side-item--active .ico{ color:#3B82F6; }
 
-  /* ===== Konten digeser sejauh lebar sidebar ===== */
+  /* ===== Konten: geser dan hanya konten yang scroll ===== */
   .content{
-    margin-left: 300px;        /* <<< agar tidak ketutup sidebar */
+    margin-left: 300px;        /* geser sejauh sidebar */
+    height: 100vh;             /* penuhi 1 viewport */
+    box-sizing: border-box;    /* padding tak nambah tinggi */
     padding: 24px 28px;
-    min-height: 100vh;
+    overflow: auto;            /* scroll di area ini saja */
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
   }
+  /* (opsional) scrollbar tampak rapi */
+  .content::-webkit-scrollbar{ width: 10px; }
+  .content::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.22); border-radius: 8px; }
+  .content::-webkit-scrollbar-track{ background: transparent; }
 
-  /* ===== Komponen lain (tidak diubah banyak) ===== */
+  /* ===== Komponen lain ===== */
   .page-pill{
     @apply text-3xl font-extrabold text-center mx-auto;
     width:320px; padding:8px 16px; color:#fff;
-    background:#2B2B2B; border-radius:9999px;
+    background:#252525; border-radius:9999px;
     box-shadow: inset 0 10px 14px rgba(255,255,255,.14),
                 inset 0 -10px 18px rgba(0,0,0,.35),
                 0 12px 20px rgba(0,0,0,.18);
@@ -110,13 +121,14 @@
   .kpi-value{ @apply text-3xl font-extrabold leading-tight; }
   .kpi-label{ @apply text-sm opacity-90 mt-1; }
 
-  /* Mobile: sidebar jadi kartu biasa */
+  /* Mobile: balik ke flow normal */
   @media (max-width:1024px){
+    html, body { overflow:auto; }    /* halaman boleh scroll di mobile */
     .side{
       position: static; width:auto; height:auto;
       border-radius:24px; box-shadow: 0 22px 40px rgba(0,0,0,.35);
     }
     .side::after{ display:none; }
-    .content{ margin-left:0; padding:16px; }
+    .content{ margin-left:0; height:auto; overflow:visible; padding:16px; }
   }
 }
