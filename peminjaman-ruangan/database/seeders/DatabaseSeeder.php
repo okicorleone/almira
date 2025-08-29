@@ -32,10 +32,20 @@ class DatabaseSeeder extends Seeder
                 'role' => 'user',
             ]
         );
+
+        User::firstOrCreate(
+            ['email' => 'User1@example.com'],
+            [
+                'name' => 'User1',
+                'password' => Hash::make('password'),
+                'role' => 'Telkomsel',
+            ]
+        );
         
         $this->call([
             RoomsTableSeeder::class,
-            BookingsTableSeeder::class
+            BookingsTableSeeder::class,
+            BookingSeeder::class
         ]);
     }
 }
