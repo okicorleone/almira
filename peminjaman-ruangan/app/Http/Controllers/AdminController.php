@@ -8,17 +8,19 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-        public function index()
+    public function index()
     {
-        $recentBookings = Booking::with(['user','room'])
+        $recentBookings = Booking::with(['user','room','role'])
             ->latest()
-            ->take(5)
+            ->take(6)
             ->get();
 
         $todayBookings = Booking::with('room')
             ->whereDate('created_at', today())
             ->orderBy('jam', 'asc')
             ->get();
+
+        
 
         // KPI array
         $kpi = [
@@ -28,10 +30,10 @@ class AdminController extends Controller
             'pending' => Booking::where('status', 'pending')->count(),
         ];
 
-        return view('admin.dashboard', compact(
-            'recentBookings',
-            'todayBookings',
-            'kpi'
-        ));
+        // return view('admin.dashboard', compact(
+        //     'recentBookings',
+        //     'todayBookings',
+        //     'kpi'
+        // ));
     }
 }

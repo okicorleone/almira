@@ -25,22 +25,21 @@
                 <th scope="col">Jam</th>
               </tr>
             </thead>
-            <tbody>
-              @foreach ([
-                ['Pemohon 1','Ruangan 1','Layanan 1','Agenda 1','07.00'],
-                ['Pemohon 2','Ruangan 2','Layanan 2','Agenda 1','07.00'],
-                ['Pemohon 3','Ruangan 3','Layanan 3','Agenda 1','07.00'],
-                ['Pemohon 4','Ruangan 4','Layanan 4','Agenda 1','07.00'],
-                ['Pemohon 5','Ruangan 5','Layanan 1','Agenda 1','07.00'],
-                ['Pemohon 6','Ruangan 6','Layanan 1','Agenda 1','07.00'],
-              ] as $r)
-                <tr>
-                  @foreach ($r as $c)
-                    <td>{{ $c }}</td>
-                  @endforeach
-                </tr>
-              @endforeach
-            </tbody>
+              <tbody>
+                @forelse ($recentBookings as $booking)
+                  <tr>
+                    <td>{{ $booking->user->name ?? '-' }}</td>
+                    <td>{{ $booking->room->nama ?? '-' }}</td>
+                    <td>{{ $booking->user->role ?? '-' }}</td>
+                    <td>{{ $booking->agenda }}</td>
+                    <td>{{ \Carbon\Carbon::createFromFormat('H:i:s', $booking->jam)->format('H:i') }}</td>
+                  </tr>
+                @empty
+                  <tr>
+                    <td colspan="5" class="text-center">Tidak ada data</td>
+                  </tr>
+                @endforelse
+              </tbody>
           </table>
         </div>
       </section>
@@ -68,14 +67,17 @@
       <section class="neo-card" aria-labelledby="jadwal-title">
         <h2 id="jadwal-title" class="card-title">Jadwal Hari ini</h2>
         <div class="divider"></div>
-
         <ul class="list-y">
-          @foreach (range(1,8) as $i)
+          @forelse ($todayBookings as $b)
             <li class="list-row">
-              <span>Ruangan 2</span>
-              <span class="text-right">07.00</span>
+              <span>{{ $b->room->nama }}</span>
+              <span class="text-right">
+                  {{ \Carbon\Carbon::createFromFormat('H:i:s', $b->jam)->format('H:i') }}
+              </span>
             </li>
-          @endforeach
+          @empty
+            <li class="list-row text-center">Tidak ada jadwal hari ini</li>
+          @endforelse
         </ul>
       </section>
     </aside>
@@ -84,19 +86,19 @@
   {{-- KPI Tiles --}}
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-6">
     <div class="kpi-tile">
-      <div class="kpi-value">12</div>
+      <div class="kpi-value">{{ $todayCount }}</div>
       <div class="kpi-label">Peminjaman Hari Ini</div>
     </div>
     <div class="kpi-tile">
-      <div class="kpi-value">20</div>
+      <div class="kpi-value">{{ $monthCount }}</div>
       <div class="kpi-label">Peminjaman Bulan Ini</div>
     </div>
     <div class="kpi-tile">
-      <div class="kpi-value">7</div>
+      <div class="kpi-value">{{ $availableRooms }}</div>
       <div class="kpi-label">Ruangan Tersedia</div>
     </div>
     <div class="kpi-tile">
-      <div class="kpi-value">5</div>
+      <div class="kpi-value">{{ $pendingRequests }}</div>
       <div class="kpi-label">Permintaan Belum Diproses</div>
     </div>
   </div>
