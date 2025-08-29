@@ -66,7 +66,7 @@
         <h2 id="jadwal-title" class="card-title">Jadwal Hari ini</h2>
         <div class="divider"></div>
         <ul class="list-y">
-          @foreach (range(1,12) as $i)
+          @forelse ($todayBookings as $b)
             <li class="list-row">
               <span>{{ $b->room->nama }}</span>
               <span class="text-right">
