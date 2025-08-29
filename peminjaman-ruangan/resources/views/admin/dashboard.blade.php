@@ -51,7 +51,7 @@
             <button type="button" class="chip">Filter Ruangan</button>
           </div>
         </div>
-        <div class="mt-2 h-[320px]">
+        <div class="mt-2 h-[300px]">
           <canvas id="statChart" class="w-full h-full" role="img" aria-label="Grafik statistik"></canvas>
         </div>
       </section>

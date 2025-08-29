@@ -16,6 +16,7 @@
 
 /* ===== COMPONENTS ===== */
 @layer components {
+
   /* FRAME penuh layar: sidebar + konten */
   .admin-frame{
     position: fixed;
@@ -29,13 +30,12 @@
     .admin-frame{ height: 100dvh; }    /* device modern */
   }
 
-  /* Sidebar */
+  /* ----- Sidebar (expanded) ----- */
   .side{
     position: relative;
-    flex: 0 0 300px;
+    flex: 0 0 300px; /* lebar tetap */
     width: 300px;
     height: 100%;
-
     padding: 22px 18px;
     color:#fff;
     background: radial-gradient(120% 120% at 20% 10%, #252525 0%, #252525 100%);
@@ -48,6 +48,7 @@
       0 12px 40px rgba(0,0,0,.35);
     overflow: visible;
     z-index: 1;
+    transition: flex-basis .25s ease, width .25s ease, padding .2s ease;
   }
   .side::after{
     content:"";
@@ -57,13 +58,44 @@
     filter: blur(14px);
     opacity:.9; pointer-events:none;
   }
+
+  /* ----- Sidebar (collapsed) ----- */
+  .side--mini{
+    flex: 0 0 72px;
+    width: 72px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .side--mini .side-title,
+  .side--mini .side-item span{ display:none; }     /* sembunyikan teks */
+  .side--mini .side-item{
+    justify-content: center;
+    padding-left: .5rem; padding-right: .5rem;
+  }
+  .side--mini .side-item .ico{ margin-right: 0; }
+  .side--mini::after{ right: -18px; width: 32px; } /* glow rapat ke sisi */
+
+  /* Header & tombol hamburger */
   .side-head{ @apply flex items-center gap-3 font-semibold px-3 py-2; color:rgba(255,255,255,.9); }
+  .side-title{ white-space: nowrap; }
+  .side-toggle{
+    appearance: none; border: 0; background: transparent;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px; margin-right: 8px;
+    color: rgba(255,255,255,.95); cursor: pointer;
+  }
+  .side-toggle:hover{ background: rgba(255,255,255,.08); }
+  .side-toggle:focus-visible{ outline: 2px solid #ffffff80; outline-offset: 2px; }
+  .side-toggle .ico{ width:22px; height:22px; }
+
+  /* Daftar menu */
   .side-nav{ @apply mt-4 space-y-3; }
   .side .ico{ width:22px; height:22px; color:rgba(255,255,255,.95); }
   .side-item{
     @apply flex items-center gap-3 rounded-xl px-4 py-3 text-[17px] font-semibold;
     color: rgba(255,255,255,.85);
     transition: background .15s ease, box-shadow .15s ease, color .15s ease;
+    min-height: 44px;
   }
   .side-item:hover{ background: rgba(255,255,255,.06); }
   .side-item--active{
@@ -73,13 +105,13 @@
   }
   .side-item--active .ico{ color:#3B82F6; }
 
-  /* CONTENT: grid 3 baris (judul / board / KPI) */
+  /* ----- CONTENT: grid 3 baris (judul / board / KPI) ----- */
   .content{
     flex: 1 1 auto;
     min-width: 0;
     height: 100%;
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr auto; /* title / scroll area / kpi */
     gap: 24px;
     padding: 24px 28px;
     overflow: hidden; /* yang scroll hanya .board di tengah */
@@ -97,7 +129,7 @@
 
   /* Komponen UI */
   .page-pill{
-    @apply text-3xl font-extrabold text-center mx-auto;
+    @apply text-3xl font-extrabold text-center mx-10;
     width:320px; padding:8px 16px; color:#fff;
     background:#252525; border-radius:9999px;
     box-shadow: inset 0 10px 14px rgba(255,255,255,.14),
