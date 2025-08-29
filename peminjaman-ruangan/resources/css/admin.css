@@ -1,35 +1,40 @@
-/* resources/css/admin.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ---------- BASE: kunci scroll global ---------- */
+/* ===== GLOBAL: matikan scroll halaman ===== */
 @layer base {
   html, body {
     height: 100%;
     margin: 0;
     background: #F1F2F4;
-    overflow: hidden;                 /* halaman utama tidak bisa scroll */
+    overflow: hidden; /* halaman utama tidak scroll */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+             env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 }
 
-/* ---------- COMPONENTS ---------- */
+/* ===== COMPONENTS ===== */
 @layer components {
-  /* Frame layar penuh: sidebar + konten (tanpa scroll) */
+  /* FRAME penuh layar: sidebar + konten */
   .admin-frame{
-    position: fixed;                  /* menutup seluruh viewport */
-    inset: 0;                         /* top/right/bottom/left = 0 */
-    display: flex;                    /* sidebar kiri + konten kanan */
-    overflow: hidden;                 /* jangan biarkan frame memicu scroll */
+    position: fixed;
+    inset: 0;
+    height: calc(var(--vh, 1vh) * 100); /* fallback iOS lama */
+    display: flex;
+    overflow: hidden; /* frame tidak memicu scroll */
     z-index: 0;
   }
+  @supports (height: 100dvh) {
+    .admin-frame{ height: 100dvh; }    /* device modern */
+  }
 
-  /* Sidebar – nempel kiri/atas/bawah, radius kanan besar */
+  /* Sidebar */
   .side{
-    position: relative;               /* cukup relative karena .admin-frame sudah fixed */
-    flex: 0 0 300px;                  /* lebar tetap 300 */
+    position: relative;
+    flex: 0 0 300px;
     width: 300px;
-    height: 100%;                     /* penuh tinggi frame */
+    height: 100%;
 
     padding: 22px 18px;
     color:#fff;
@@ -37,14 +42,13 @@
     border-top-right-radius: 80px;
     border-bottom-right-radius: 80px;
     box-shadow:
-      inset 0 1px 0 rgba(202, 38, 38, 0.08),
+      inset 0 1px 0 rgba(202,38,38,.08),
       inset 0 -3px 10px rgba(0,0,0,.55),
       28px 0 60px rgba(0,0,0,.45),
       0 12px 40px rgba(0,0,0,.35);
     overflow: visible;
     z-index: 1;
   }
-  /* Glow putih di tepi kanan sidebar */
   .side::after{
     content:"";
     position:absolute; top:12px; bottom:12px; right:-26px; width:42px;
@@ -69,25 +73,31 @@
   }
   .side-item--active .ico{ color:#3B82F6; }
 
-  /* Area konten — inilah yang boleh scroll */
+  /* CONTENT: grid 3 baris (judul / board / KPI) */
   .content{
-    flex: 1 1 auto;                   /* ambil sisa lebar */
-    min-width: 0;                     /* biar flex item tidak overflow */
-    height: 100%;                     /* penuh tinggi frame */
-    box-sizing: border-box;           /* padding tidak menambah tinggi */
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 24px;
     padding: 24px 28px;
-    overflow: auto;                   /* scroll hanya di sini */
-    overscroll-behavior: contain;
-    scrollbar-gutter: stable;
+    overflow: hidden; /* yang scroll hanya .board di tengah */
   }
-  /* (opsional) perapihan scrollbar konten */
-  .content::-webkit-scrollbar{ width: 10px; }
-  .content::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.22); border-radius: 8px; }
-  .content::-webkit-scrollbar-track{ background: transparent; }
 
-  /* Komponen kartu/typography yang sudah ada */
+  /* area tengah yang boleh scroll internal */
+  .board{ min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+  .board::-webkit-scrollbar{ width: 10px; }
+  .board::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.22); border-radius: 8px; }
+  .board::-webkit-scrollbar-track{ background: transparent; }
+
+  /* helper untuk anak grid/flex yang harus bisa menyusut */
+  .col-stretch{ min-height: 0; overflow: hidden; }
+  .card-scroll{ height: 100%; overflow: auto; }
+
+  /* Komponen UI */
   .page-pill{
-    @apply text-3xl font-extrabold text-center mx-12 mb-auto;
+    @apply text-3xl font-extrabold text-center mx-auto;
     width:320px; padding:8px 16px; color:#fff;
     background:#252525; border-radius:9999px;
     box-shadow: inset 0 10px 14px rgba(255,255,255,.14),
@@ -124,15 +134,15 @@
   .kpi-value{ @apply text-3xl font-extrabold leading-tight; }
   .kpi-label{ @apply text-sm opacity-90 mt-1; }
 
-  /* Mobile: balik ke flow normal (halaman boleh scroll) */
+  /* Mobile: kembali ke flow normal */
   @media (max-width:1024px){
     html, body { overflow:auto; }
-    .admin-frame{ position: static; display:block; }
+    .admin-frame{ position: static; display:block; height:auto; }
+    .content{ grid-template-rows: auto auto auto; height:auto; overflow:visible; padding:16px; }
     .side{
       width:auto; height:auto; border-radius:24px;
       box-shadow: 0 22px 40px rgba(0,0,0,.35);
     }
     .side::after{ display:none; }
-    .content{ height:auto; overflow:visible; padding:16px; }
   }
 }
