@@ -116,10 +116,10 @@
       new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['Ruangan 1','Ruangan 2','Ruangan 3','Ruangan 4','Ruangan 5','Ruangan 6'],
+          labels: @json($labels),   // Ambil label dari database,
           datasets: [{
             label: 'Pemakaian',
-            data: [5,22,26,30,12,50],
+            data: @json($data),
             borderColor: '#ED1C24',
             backgroundColor: grad,
             tension: .35,

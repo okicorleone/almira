@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Ruangan;
 use App\Models\Booking;
@@ -13,6 +14,17 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        // Ambil pemakaian ruangan bulan ini
+        $roomUsage = Booking::select('room_id',DB::raw('COUNT(*) as total'))
+        ->whereMonth('created_at', now()->month)
+        ->groupBy('room_id')
+        ->with('room')
+        ->get();
+
+        // Label = nama ruangan, Data = jumlah pemakaian
+        $labels = $roomUsage->pluck('room.nama');
+        $data   = $roomUsage->pluck('total');
+
         // Ambil 5 peminjaman terbaru
         $recentBookings = Booking::with(['user', 'room'])
             ->latest()
@@ -38,6 +50,6 @@ class DashboardController extends Controller
 
         //     'pending'  => Booking::where('status', 'pending')->count(),
         // ];
-        return view('admin.dashboard', compact('recentBookings', 'pendingRequests','todayBookings','todayCount','monthCount','availableRooms'));
+        return view('admin.dashboard', compact('recentBookings', 'pendingRequests','todayBookings','todayCount','monthCount','availableRooms', 'labels', 'data'));
     }
 }
