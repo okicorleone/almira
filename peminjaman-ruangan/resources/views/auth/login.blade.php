@@ -15,7 +15,31 @@
           </p>
           <ol class="list-decimal pl-5 space-y-2 text-[13px] text-[#232323]/85">
             <li>Jika anda ingin melakukan registrasi, silahkan hubungi admin melalui
-              <a href="https://wa.me/6281312465290?text=Halo%20Admin,%20saya%20ingin%20mendaftar%20akun%20Almira%20berikut%20Formulir%20yang%20sudah%20saya%20isi%20sesuai%20dengan%20data%20diri%20saya.%0ANama%20:%20%0AEmail%20:%20%0AAlamat%20:%20" target="_blank" class="text-[#27AE60] font-semibold">WhatsApp</a> terlebih dahulu.</li>
+              <a id="whatsappLink" class="text-[#27AE60] font-semibold" target="_blank">WhatsApp </a>terlebih dahulu.
+              <script>
+                  const phone = "6281312465290";
+
+                  const today = new Date();
+                  const year = today.getFullYear();
+                  const month = String(today.getMonth() + 1).padStart(2, '0');
+                  const day = String(today.getDate()).padStart(2, '0');
+                  const currentDate = `${year}-${month}-${day}`;
+
+                  const message = `Halo Admin, saya ingin mendaftarkan akun Almira dengan data diri sebagai berikut:\n
+      - Nama Lengkap : [Isi Nama Lengkap]
+      - Email : [Isi Alamat Email]
+      - Kata Sandi : [Isi Password]
+      - Layanan : [Isi Layanan Anda]
+      - Email : [Tuliskan Email Aktif Anda]
+      - Tanggal Pendaftaran : ${currentDate}\n
+Mohon agar data saya dapat diproses untuk pembuatan akun Almira. Terima kasih.`;
+
+                  const encodedMessage = encodeURIComponent(message);
+                  const whatsappURL = `https://api.whatsapp.com/send/?phone=${phone}&text=${encodedMessage}&type=phone_number&app_absent=0`;
+
+                  document.getElementById("whatsappLink").setAttribute("href", whatsappURL);
+              </script>
+            </li>
             <li>Jangan mengisi data sembarangan, ikuti panduan pendaftaran yang diberikan oleh admin.</li>
             <li>Jangan membuat akun lebih dari satu, gunakan satu akun resmi untuk keperluan pinjaman.</li>
             <li>Jangan mengabaikan pesan verifikasi dari admin, pastikan anda mendapat konfirmasi sebelum login.</li>
