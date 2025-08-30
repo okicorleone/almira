@@ -54,7 +54,7 @@
             <button type="button" class="chip">Filter Ruangan</button>
           </div>
         </div>
-        <div class="mt-2 h-[300px]">
+        <div class="mt-2 h-[200px]">
           <canvas id="statChart" class="w-full h-full" role="img" aria-label="Grafik statistik"></canvas>
         </div>
       </section>
@@ -134,7 +134,8 @@
           scales: {
             x: { grid: { color: 'rgba(0,0,0,.06)' } },
             y: { suggestedMin: 0, suggestedMax: 60, grid: { color: 'rgba(0,0,0,.06)' } }
-          }
+          },
+          devicePixelRatio: 1,
         }
       });
     })();

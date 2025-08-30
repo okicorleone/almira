@@ -165,6 +165,10 @@
   }
   .kpi-value{ @apply text-3xl font-extrabold leading-tight; }
   .kpi-label{ @apply text-sm opacity-90 mt-1; }
+  #statChart {
+  width: 100% !important;
+  height: 100% !important;
+}
 
   /* Mobile: kembali ke flow normal */
   @media (max-width:1024px){
