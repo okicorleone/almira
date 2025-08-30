@@ -133,7 +133,7 @@
           plugins: { legend: { display:false } },
           scales: {
             x: { grid: { color: 'rgba(0,0,0,.06)' } },
-            y: { suggestedMin: 0, suggestedMax: 60, grid: { color: 'rgba(0,0,0,.06)' } }
+            y: { suggestedMin: 0, suggestedMax: 40, grid: { color: 'rgba(0,0,0,.06)' } }
           },
           devicePixelRatio: 1,
         }
