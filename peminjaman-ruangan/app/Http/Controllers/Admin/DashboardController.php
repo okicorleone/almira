@@ -48,7 +48,7 @@ class DashboardController extends Controller
         //     'month'    => Booking::whereMonth('created_at', Carbon::now()->month)->count(),
         //     'rooms'    => Room::count(),
 
-        //     'pending'  => Booking::where('status', 'pending')->count(),
+        //     'pending'  => Booking::where('status', 'pending')->count(), test
         // ];
         return view('admin.dashboard', compact('recentBookings', 'pendingRequests','todayBookings','todayCount','monthCount','availableRooms', 'labels', 'data'));
     }
