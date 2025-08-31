@@ -20,8 +20,8 @@ class DashboardController extends Controller
 
         $query = Booking::query()
             ->select('room_id', DB::raw('COUNT(*) as total'))
-            ->when($year, fn($q) => $q->whereYear('created_at', $year))
-            ->when($month, fn($q) => $q->whereMonth('created_at', $month))
+            ->when($year, fn($q) => $q->whereYear('tanggal', $year))
+            ->when($month, fn($q) => $q->whereMonth('tanggal', $month))
             ->when($room, fn($q) => $q->where('room_id', $room))
             ->groupBy('room_id')
             ->with('room')
