@@ -49,9 +49,38 @@
         <div class="card-title flex items-center justify-between">
           <h2 id="statistik-title">Statistik</h2>
           <div class="chip-group">
-            <button type="button" class="chip">Filter Bulan</button>
-            <button type="button" class="chip">Filter Tahun</button>
-            <button type="button" class="chip">Filter Ruangan</button>
+            <form method="GET" action="{{ route('admin.dashboard') }}" class="inline">
+              <select name="month" onchange="this.form.submit()" class="chip">
+                <option value="">Filter Bulan</option>
+                @for ($m = 1; $m <= 12; $m++)
+                  <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
+                    {{ \Carbon\Carbon::create()->month($m)->format('F') }}
+                  </option>
+                @endfor
+              </select>
+            </form>
+
+            <form method="GET" action="{{ route('admin.dashboard') }}" class="inline">
+              <select name="year" onchange="this.form.submit()" class="chip">
+                <option value="">Filter Tahun</option>
+                @for ($y = now()->year; $y >= 2020; $y--)
+                  <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>
+                    {{ $y }}
+                  </option>
+                @endfor
+              </select>
+            </form>
+
+            <form method="GET" action="{{ route('admin.dashboard') }}" class="inline">
+              <select name="room" onchange="this.form.submit()" class="chip">
+                <option value="">Filter Ruangan</option>
+                @foreach ($rooms as $room)
+                  <option value="{{ $room->id }}" {{ request('room') == $room->id ? 'selected' : '' }}>
+                    {{ $room->nama }}
+                  </option>
+                @endforeach
+              </select>
+            </form>
           </div>
         </div>
         <div class="mt-2 h-[200px]">

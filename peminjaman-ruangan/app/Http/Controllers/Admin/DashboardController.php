@@ -12,8 +12,23 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $year = $request->input('year');
+        $month = $request->input('month');
+        $room = $request->input('room');
+
+        $query = Booking::query()
+            ->select('room_id', DB::raw('COUNT(*) as total'))
+            ->when($year, fn($q) => $q->whereYear('created_at', $year))
+            ->when($month, fn($q) => $q->whereMonth('created_at', $month))
+            ->when($room, fn($q) => $q->where('room_id', $room))
+            ->groupBy('room_id')
+            ->with('room')
+            ->orderBy('room_id');
+        
+        $result = $query->get();
+
         // Ambil pemakaian ruangan bulan ini
         $roomUsage = Booking::select('room_id',DB::raw('COUNT(*) as total'))
         ->whereMonth('created_at', now()->month)
@@ -22,13 +37,13 @@ class DashboardController extends Controller
         ->get();
 
         // Label = nama ruangan, Data = jumlah pemakaian
-        $labels = $roomUsage->pluck('room.nama');
-        $data   = $roomUsage->pluck('total');
+        $labels = $result->map(fn($row) => $row->room->nama ?? 'Unknown');
+        $data   = $result->pluck('total');
 
         // Ambil 5 peminjaman terbaru
         $recentBookings = Booking::with(['user', 'room'])
             ->latest()
-            ->take(6)
+            ->take(5)
             ->get();
 
         // Jadwal hari ini
@@ -41,6 +56,12 @@ class DashboardController extends Controller
         $monthCount = Booking::whereMonth('tanggal', Carbon::now()->month)->count();
         $availableRooms = Room::where('status', 'tersedia')->count();
         $pendingRequests = Booking::where('status', 'pending')->count();
+        $rooms = Room::all();
+
+        return view('admin.dashboard', compact('recentBookings', 'pendingRequests', 
+        'todayBookings', 'todayCount', 'monthCount', 'availableRooms', 'labels', 'data', 'query','month', 'year', 'room','rooms'));
+    }
+}
 
         // KPI (contoh hitungan sederhana)
         // $kpi = [
@@ -50,6 +71,3 @@ class DashboardController extends Controller
 
         //     'pending'  => Booking::where('status', 'pending')->count(), test
         // ];
-        return view('admin.dashboard', compact('recentBookings', 'pendingRequests','todayBookings','todayCount','monthCount','availableRooms', 'labels', 'data'));
-    }
-}
