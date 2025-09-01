@@ -1,9 +1,11 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
-import roomsPage from './rooms';   // <— import komponen halaman rooms
+import roomsPage from './rooms';
+import loansPage from './loans';   // <— tambah
 
 window.Alpine = Alpine;
-window.roomsPage = roomsPage;      // <— expose supaya bisa dipakai: x-data="roomsPage()"
+window.roomsPage = roomsPage;
+window.loansPage = loansPage;      // <— expose
 
-Alpine.start();                    // <— start terakhir
+Alpine.start();
