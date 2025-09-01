@@ -48,7 +48,7 @@
         @php $is = fn($p) => request()->is($p); @endphp
 
         <a href="{{ url('/admin/dashboard') }}"
-           class="side-item {{ $is('admin') ? 'side-item--active' : '' }}"
+           class="side-item {{ $is('admin/dashboard') ? 'side-item--active' : '' }}"
            title="Beranda">
           <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 3 10h3v8h5v-5h2v5h5v-8h3z"/></svg>
           <span>Beranda</span>
