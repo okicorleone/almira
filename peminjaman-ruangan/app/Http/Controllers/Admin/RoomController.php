@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Room;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
@@ -13,7 +15,7 @@ class RoomController extends Controller
     public function index()
     {
         $rooms = Room::all();
-        return view('admin.rooms.index', compact('rooms'));
+        return view('admin.rooms', compact('rooms'));
 
 
     }
