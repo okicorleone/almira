@@ -29,13 +29,6 @@ class DashboardController extends Controller
         
         $result = $query->get();
 
-        // Ambil pemakaian ruangan bulan ini
-        $roomUsage = Booking::select('room_id',DB::raw('COUNT(*) as total'))
-        ->whereMonth('created_at', now()->month)
-        ->groupBy('room_id')
-        ->with('room')
-        ->get();
-
         // Label = nama ruangan, Data = jumlah pemakaian
         $labels = $result->map(fn($row) => $row->room->nama ?? 'Unknown');
         $data   = $result->pluck('total');
@@ -48,7 +41,7 @@ class DashboardController extends Controller
 
         // Jadwal hari ini
         $todayBookings = Booking::with('room')
-            ->whereDate('created_at', today())
+            ->whereDate('tanggal', today())
             ->orderBy('jam', 'asc')
             ->get();
 
@@ -58,7 +51,7 @@ class DashboardController extends Controller
         $pendingRequests = Booking::where('status', 'pending')->count();
         $rooms = Room::all();
 
-        return view('admin.dashboard', compact('recentBookings', 'pendingRequests', 
+        return view('admin.dashboard', compact('recentBookings', 'pendingRequests',
         'todayBookings', 'todayCount', 'monthCount', 'availableRooms', 'labels', 'data', 'query','month', 'year', 'room','rooms'));
     }
 }
@@ -71,3 +64,10 @@ class DashboardController extends Controller
 
         //     'pending'  => Booking::where('status', 'pending')->count(), test
         // ];
+
+                // // Ambil pemakaian ruangan bulan ini
+        // $roomUsage = Booking::select('room_id',DB::raw('COUNT(*) as total'))
+        // ->whereMonth('created_at', now()->month)
+        // ->groupBy('room_id')
+        // ->with('room')
+        // ->get();

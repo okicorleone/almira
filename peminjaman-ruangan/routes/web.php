@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 // routes/web.php
 // routes/web.php
-Route::view('/admin', 'admin.dashboard')->name('admin.dashboard');
+Route::get('/admin', function () {
+    return redirect()->route('admin.dashboard');
+});
 
 
 Route::get('/', function () {
@@ -33,9 +35,18 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Dashboard untuk Admin
-Route::middleware(['auth', 'isAdmin'])->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+// Dashboard untuk Admin + Manajemen Ruangan
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Manajemen Ruangan (CRUD)
+    Route::resource('rooms', \App\Http\Controllers\Admin\RoomController::class);
 });
+
+
+// // Dashboard untuk Admin
+// Route::middleware(['auth', 'isAdmin'])->group(function () {
+//     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+// });
 
 require __DIR__.'/auth.php';
