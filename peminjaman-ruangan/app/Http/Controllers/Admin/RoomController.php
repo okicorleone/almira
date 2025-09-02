@@ -12,12 +12,19 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $rooms = Room::all();
-        return view('admin.rooms', compact('rooms'));
+    $query = Room::query();
 
+    if ($request->has('search') && $request->search != '') {
+        $query->where('nama', 'like', '%' . $request->search . '%')
+              ->orWhere('lantai', 'like', '%' . $request->search . '%')
+              ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+    }
 
+    $rooms = $query->get();
+
+    return view('admin.rooms', compact('rooms'));
     }
 
     /**
@@ -35,13 +42,19 @@ class RoomController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'status' => 'required|in:tersedia,tidak tersedia',
+            'lantai' => 'required|integer',
+            'deskripsi' => 'nullable|string',
         ]);
 
-        Room::create($request->all());
+        Room::create([
+            'nama' => $request->nama,
+            'lantai' => $request->lantai,
+            'deskripsi' => $request->deskripsi,
+        ]);
 
-        return redirect()->route('admin.rooms.index')->with('success', 'Ruangan berhasil ditambahkan');
+        return redirect()->route('admin.rooms')->with('success', 'Ruangan berhasil ditambahkan');
     }
+
 
     /**
      * Display the specified resource.
@@ -62,31 +75,30 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Room $room)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'status' => 'required|in:tersedia,tidak tersedia',
+            'name' => 'required|string|max:255',
+            'floor' => 'required|integer',
+            'description' => 'nullable|string',
         ]);
 
-        $room->update($request->all());
+        $room->update([
+            'nama' => $request->name,
+            'lantai' => $request->floor,
+            'deskripsi' => $request->description,
+        ]);
 
-        return redirect()->route('admin.rooms.index')->with('success', 'Ruangan berhasil diperbarui');
+        return redirect()->route('admin.rooms')->with('success', 'Ruangan berhasil diperbarui');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Room $room)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'status' => 'required|in:tersedia,tidak tersedia',
-        ]);
-
-        $room->update($request->all());
-
-        return redirect()->route('admin.rooms.index')->with('success', 'Ruangan berhasil diperbarui');
+        $room->delete();
+        return redirect()->route('admin.rooms')->with('success', 'Ruangan berhasil dihapus');
     }
     
 
