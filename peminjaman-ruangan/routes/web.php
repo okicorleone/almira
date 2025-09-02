@@ -3,43 +3,33 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-// Controller imports
+// ==== Controllers ====
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\LoanController;
+use App\Http\Controllers\Admin\ScheduleController;
+use App\Http\Controllers\Admin\StatsController;
 
 // ================== Redirect root & /admin ==================
+Route::get('/admin', fn () => redirect()->route('admin.dashboard'));
 
-// Jika akses /admin langsung, redirect ke dashboard admin
-Route::get('/admin', function () {
-    return redirect()->route('admin.dashboard');
-});
-
-// Root (/) → arahkan sesuai role
 Route::get('/', function () {
     if (Auth::check()) {
-        // Kalau admin
-        if (Auth::user()->role === 'admin') {
-            return redirect('/admin/dashboard');
-        }
-        // Kalau user biasa
-        return redirect('/dashboard');
+        return Auth::user()->role === 'admin'
+            ? redirect('/admin/dashboard')
+            : redirect('/dashboard');
     }
     return redirect('/login');
 });
 
 // ================== USER ROUTES ==================
 Route::middleware(['auth'])->group(function () {
-    // Dashboard untuk User (bukan admin)
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
 
-    // Profile
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile',  [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile',[ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile',[ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // ================== ADMIN ROUTES ==================
@@ -47,18 +37,23 @@ Route::middleware(['auth', 'isAdmin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+        // Dashboard admin
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Dashboard admin
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        // Manajemen Ruangan (CRUD)
+        Route::resource('rooms', RoomController::class);
 
-    // Manajemen Ruangan (CRUD)
-    Route::resource('rooms', RoomController::class);
+        // Permintaan Peminjaman (Loans)
+        Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
+        Route::put('loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
+        Route::put('loans/{loan}/reject',  [LoanController::class, 'reject'])->name('loans.reject');
 
-    // Permintaan Peminjaman (Loans)
-    Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
-    Route::put('loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
-    Route::put('loans/{loan}/reject', [LoanController::class, 'reject'])->name('loans.reject');
-});
+        // Jadwal Pemakaian
+        Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
+
+        // Statistik Pemakaian
+        Route::get('stats', [StatsController::class, 'index'])->name('stats');
+    });
 
 // ================== AUTH ROUTES ==================
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
