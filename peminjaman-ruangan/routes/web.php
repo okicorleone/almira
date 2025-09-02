@@ -40,21 +40,18 @@ Route::middleware(['auth', 'isAdmin'])
         // Dashboard admin
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Manajemen Ruangan (CRUD)
-        Route::resource('rooms', RoomController::class);
+    // Manajemen Ruangan (CRUD)
+    Route::resource('rooms', RoomController::class);
 
-<<<<<<< Updated upstream
         // Permintaan Peminjaman (Loans)
         Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
         Route::put('loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
         Route::put('loans/{loan}/reject',  [LoanController::class, 'reject'])->name('loans.reject');
-=======
-    // Manajemen Ruangan (CRUD)
-    Route::get('/rooms', [RoomController::class,'index'])->name('rooms');
-    Route::post('/rooms', [RoomController::class,'store'])->name('store');
-    Route::put('/rooms/{room}', [RoomController::class,'update'])->name('update');
-    Route::delete('/rooms/{room}', [RoomController::class,'destroy'])->name('destroy');
->>>>>>> Stashed changes
+        // Manajemen Ruangan (CRUD)
+        Route::get('/rooms', [RoomController::class,'index'])->name('rooms');
+        Route::post('/rooms', [RoomController::class,'store'])->name('store');
+        Route::put('/rooms/{room}', [RoomController::class,'update'])->name('update');
+        Route::delete('/rooms/{room}', [RoomController::class,'destroy'])->name('destroy');
 
         // Jadwal Pemakaian
         Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
