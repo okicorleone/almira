@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== GLOBAL: matikan scroll halaman ===== */
+/* ===== GLOBAL ===== */
 @layer base {
   html, body {
     height: 100%;
@@ -17,7 +17,7 @@
 /* ===== COMPONENTS ===== */
 @layer components {
 
-  /* FRAME penuh layar: sidebar + konten */
+  /* === FRAME penuh layar: sidebar + konten === */
   .admin-frame{
     position: fixed;
     inset: 0;
@@ -114,7 +114,8 @@
     grid-template-rows: auto 1fr auto; /* title / scroll area / kpi */
     gap: 24px;
     padding: 24px 28px;
-    overflow: hidden; /* yang scroll hanya .board di tengah */
+    overflow: hidden;                  /* yang scroll hanya .board di tengah */
+    position: relative;                /* untuk topbar absolute */
   }
 
   /* area tengah yang boleh scroll internal */
@@ -135,6 +136,8 @@
     box-shadow: inset 0 10px 14px rgba(255,255,255,.14),
                 inset 0 -10px 18px rgba(0,0,0,.35),
                 0 12px 20px rgba(0,0,0,.18);
+    margin-left: 12px;
+    margin-right: 0;
   }
   .neo-card{
     background:#D9D9D9; border-radius:18px; padding:18px;
@@ -165,80 +168,129 @@
   }
   .kpi-value{ @apply text-3xl font-extrabold leading-tight; }
   .kpi-label{ @apply text-sm opacity-90 mt-1; }
-  #statChart {
-  width: 100% !important;
-  height: 100% !important;
-}
+  #statChart { width: 100% !important; height: 100% !important; }
 
-  /* Mobile: kembali ke flow normal */
+  /* === TOPBAR di kanan atas === */
+  .topbar{
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    z-index: 10;
+    display:flex; align-items:center; gap:.75rem;
+    justify-content:flex-end;
+  }
+
+  .icon-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:40px; height:40px; border-radius:12px;
+    background:#D9D9D9;
+    box-shadow:
+      inset 0 8px 12px rgba(255,255,255,.45),
+      inset 0 -10px 16px rgba(0,0,0,.14),
+      0 10px 20px rgba(0,0,0,.12);
+  }
+  .icon-btn:hover{ filter:brightness(.98); }
+
+  /* dot indikator notif */
+  .icon-btn .ping{
+    position:absolute; top:6px; right:6px; width:8px; height:8px;
+    background:#ED1C24; border-radius:9999px; box-shadow:0 0 0 4px rgba(237,28,36,.18);
+  }
+
+  /* avatar */
+  .avatar-btn{
+    display:inline-flex; align-items:center; gap:.5rem;
+    background:#D9D9D9; height:40px; padding:0 10px; border-radius:9999px;
+    box-shadow:
+      inset 0 8px 12px rgba(255,255,255,.45),
+      inset 0 -10px 16px rgba(0,0,0,.14),
+      0 10px 20px rgba(0,0,0,.12);
+  }
+  .avatar-img{ width:26px; height:26px; border-radius:9999px; object-fit:cover; }
+  .avatar-name{ font-weight:600; font-size:14px; }
+
+  /* dropdown panel */
+  .dropdown{
+    position:absolute; top:48px; right:0;
+    background:#EFEFEF; border-radius:18px; overflow:hidden;
+    box-shadow: 0 18px 36px rgba(0,0,0,.18),
+                inset 0 2px 0 rgba(255,255,255,.7),
+                inset 0 -6px 10px rgba(0,0,0,.08);
+    border:1px solid rgba(0,0,0,.06);
+  }
+  .dropdown-title{ font-weight:700; padding:12px 14px; }
+
+  .menu-link{
+    display:flex; align-items:center; gap:.6rem;
+    padding:10px 14px; font-weight:600;
+  }
+  .menu-link:hover{ background:rgba(0,0,0,.06); }
+  .menu-ico{ width:18px; height:18px; color:#333; }
+
+  /* === Mobile tweaks === */
   @media (max-width:1024px){
     html, body { overflow:auto; }
     .admin-frame{ position: static; display:block; height:auto; }
     .content{ grid-template-rows: auto auto auto; height:auto; overflow:visible; padding:16px; }
-    .side{
-      width:auto; height:auto; border-radius:24px;
-      box-shadow: 0 22px 40px rgba(0,0,0,.35);
-    }
+    .side{ width:auto; height:auto; border-radius:24px; box-shadow: 0 22px 40px rgba(0,0,0,.35); }
     .side::after{ display:none; }
+    .topbar{ position: static; margin-left: auto; }
   }
 
-  /* ===== Toolbar / Buttons / Search ===== */ 
-.toolbar .btn-soft{
-  display:inline-flex; align-items:center; gap:.5rem;
-  height:44px; padding:0 16px; border-radius:14px;
-  background:#D9D9D9;
-  box-shadow:
-    inset 0 8px 12px rgba(255,255,255,.45),
-    inset 0 -10px 16px rgba(0,0,0,.14),
-    0 10px 20px rgba(0,0,0,.12);
-  font-weight:600; color:#1B1B1B;
-  transition: filter .15s ease, transform .05s ease;
+
+    /* ===== Toolbar: Search + Tambah ===== */
+  .toolbar{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; }
+
+  /* Search */
+  .search{ display:block; }
+  .search-wrap{
+    position: relative;
+    width: 280px; /* atur sesuai mau */
+  }
+  .search-ico{
+    position:absolute; left:12px; top:50%;
+    transform: translateY(-50%);
+    width:18px; height:18px; opacity:.7;
+    pointer-events:none;
+  }
+  .search-input{
+    width:100%;
+    border-radius:14px;
+    background:#E7E7E7;
+    padding:10px 12px 10px 40px; /* space utk ikon */
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,.65),
+      inset 0 -6px 10px rgba(0,0,0,.12);
+    outline: none;
+  }
+  .search-input::placeholder{ color:#6b7280; }
+
+  /* Tombol Tambah (neo soft) */
+  .btn-soft{
+    display:inline-flex; align-items:center; gap:.5rem;
+    padding:10px 14px; border-radius:9999px;
+    background:#D9D9D9; font-weight:700;
+    box-shadow:
+      inset 0 8px 12px rgba(255,255,255,.45),
+      inset 0 -10px 16px rgba(0,0,0,.14),
+      0 10px 20px rgba(0,0,0,.12);
+  }
+  .btn-soft:hover{ filter:brightness(.98); }
+  .btn-ico{ width:18px; height:18px; }
+
+  /* Header tabel bulat (pill) */
+  .th-pill{
+    display:grid; place-items:center;
+    height:48px; color:#fff; font-weight:700;
+    background:#252525; border-radius:9999px;
+    box-shadow:
+      inset 0 8px 12px rgba(255,255,255,.08),
+      inset 0 -10px 18px rgba(0,0,0,.45);
+  }
+
+  /* Link aksi Edit / Hapus */
+  .action-link{ font-weight:700; }
+  .action-link--edit{ color:#16a34a; }   /* hijau */
+  .action-link--delete{ color:#ef4444; } /* merah */
+
 }
-.toolbar .btn-soft:hover{ filter:brightness(.98); }
-.toolbar .btn-soft:active{ transform:translateY(1px); }
-.toolbar .btn-soft .btn-ico{ width:20px; height:20px; }
-
-.search .search-wrap{ position:relative; }
-.search .search-ico{
-  position:absolute; left:10px; top:50%; transform:translateY(-50%);
-  width:20px; height:20px; color:#6B6B6B; pointer-events:none;
-}
-.search .search-input{
-  width:44px; height:44px; border-radius:9999px;
-  background:#D9D9D9; border:0;
-  padding-left:40px; padding-right:14px;
-  box-shadow:
-    inset 3px 3px 6px rgba(0,0,0,.18),
-    inset -3px -3px 6px rgba(255,255,255,.85);
-  transition: width .22s ease;
-}
-.search .search-input::placeholder{ color:#8A8A8A; }
-.search .search-input:focus{
-  outline:none; width:260px;
-  box-shadow:
-    inset 3px 3px 6px rgba(0,0,0,.20),
-    inset -3px -3px 6px rgba(255,255,255,.88);
-}
-
-/* ===== Pill header untuk kolom ===== */
-.th-pill{
-  color:#fff; text-align:center; font-weight:700;
-  padding:10px 16px; border-radius:9999px;
-  background:#2B2B2B;
-  box-shadow:
-    inset 0 6px 10px rgba(255,255,255,.12),
-    inset 0 -8px 16px rgba(0,0,0,.40);
-}
-
-/* ===== Link aksi ===== */
-.action-link{ text-decoration:none; }
-.action-link:hover{ text-decoration:underline; }
-.action-link--edit{ color:#1F8A3A; font-weight:600; }
-.action-link--delete{ color:#D62828; font-weight:600; }
-
-/* (opsional) rapikan divider agar tipis */
-.neo-card .divider{ background:rgba(0,0,0,.10); height:1px; }
-
-}
-
-
