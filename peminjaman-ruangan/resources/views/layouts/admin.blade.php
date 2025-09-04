@@ -78,8 +78,8 @@
           <span>Statistik Pemakaian</span>
         </a>
 
-        <a href="{{ url('/admin/users') }}"
-           class="side-item {{ $is('admin/users*') ? 'side-item--active' : '' }}">
+        <a href="{{ url('/admin/manageuser') }}"
+           class="side-item {{ $is('admin/manageuser*') ? 'side-item--active' : '' }}">
           <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4ZM4 20a8 8 0 0 1 16 0z"/></svg>
           <span>Registrasi Pengguna</span>
         </a>
