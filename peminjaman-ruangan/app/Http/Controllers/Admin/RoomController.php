@@ -69,7 +69,7 @@ class RoomController extends Controller
      */
     public function edit(string $id)
     {
-        return view('admin.rooms.edit', compact('room'));
+        return view('admin.rooms', compact('room'));
     }
 
     /**

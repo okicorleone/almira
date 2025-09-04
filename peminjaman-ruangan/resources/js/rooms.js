@@ -18,9 +18,9 @@ export default function roomsPage () {
       this.reset();
       this.formEdit = {
         id:          r?.id ?? '',
-        name:        r?.name ?? '',
-        floor:       r?.floor ?? '',
-        description: r?.desc ?? r?.description ?? ''
+        name:        r?.nama ?? '',
+        floor:       r?.lantai ?? '',
+        description: r?.desc ?? r?.deskripsi ?? ''
       };
       this.showEdit = true;
     },

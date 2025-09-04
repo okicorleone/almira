@@ -116,15 +116,12 @@
         <textarea x-model="formEdit.description" name="description" rows="4"
                   class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400"></textarea>
       </div>
-
-      @slot('footer')
       <div class="flex justify-center gap-4">
         <button type="button" @click="reset()"
                 class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow-[0_6px_0_#6b7280]">Batal</button>
         <button type="submit"
                 class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow-[0_6px_0_#4b5563]">OK</button>
       </div>
-      @endslot
     </form>
   </x-neo-modal>
 
