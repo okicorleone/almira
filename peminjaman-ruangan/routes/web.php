@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\LoanController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\StatsController;
+use App\Http\Controllers\Admin\ManageUserController;
 
 // ================== Redirect root & /admin ==================
 Route::get('/admin', fn () => redirect()->route('admin.dashboard'));
@@ -58,6 +59,15 @@ Route::middleware(['auth', 'isAdmin'])
 
         // Statistik Pemakaian
         Route::get('stats', [StatsController::class, 'index'])->name('stats');
+        // Manajemen User
+
+    Route::resource('manageuser', ManageUserController::class)->names([
+        'index'   => 'manageuser',
+        // 'store'   => 'manageuser',
+        // 'update'  => 'manageuser',
+        // 'destroy' => 'manageuser',
+    ])->except(['create','edit','show']);
+
     });
 
 // ================== AUTH ROUTES ==================
