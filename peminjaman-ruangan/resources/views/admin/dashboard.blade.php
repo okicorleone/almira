@@ -22,7 +22,7 @@
                 <th>Nama Ruangan</th>
                 <th>Layanan</th>
                 <th>Agenda</th>
-                <th>Jam</th>
+                <th>Waktu Pengajuan</th>
               </tr>
             </thead>
               <tbody>
@@ -32,7 +32,7 @@
                     <td>{{ $booking->room->nama ?? '-' }}</td>
                     <td>{{ $booking->user->role ?? '-' }}</td>
                     <td>{{ $booking->agenda }}</td>
-                    <td>{{ \Carbon\Carbon::createFromFormat('H:i:s', $booking->jam)->format('H:i') }}</td>
+                    <td>{{ $booking->created_at }}</td>
                   </tr>
                 @empty
                   <tr>
