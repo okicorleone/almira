@@ -15,6 +15,7 @@ class Booking extends Model
         'agenda',
         'jam',
         'status',
+        'created_at',
     ];
 
     protected $casts = [
