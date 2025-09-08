@@ -1,6 +1,4 @@
-import Alpine from 'alpinejs';
-
-window.manageUsersPage = () => ({
+export default () => ({
   showAdd: false,
   showEdit: false,
   showDelete: false,

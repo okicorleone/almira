@@ -4,7 +4,7 @@ import Alpine from 'alpinejs';
 import roomsPage from './rooms';
 import loansPage from './loans';
 import schedulePage from './schedule'; 
-import manageUsersPage from './manage_users'
+import manageUsersPage from './manage_users';
 
 window.Alpine = Alpine;
 window.roomsPage = roomsPage;
