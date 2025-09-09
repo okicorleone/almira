@@ -1,3 +1,4 @@
+{{-- resources/views/layouts/user.blade.php --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -10,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.bunny.net">
   <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet">
 
-  {{-- HANYA user.css, jangan admin.css --}}
+  {{-- PENTING: hanya user.css, jangan admin.css --}}
   @vite([
     'resources/css/app.css',
     'resources/css/user.css',
@@ -20,25 +21,23 @@
   <style>[x-cloak]{display:none!important}</style>
 </head>
 <body class="font-sans antialiased">
-
-  {{-- PENTING: pakai user-frame, bukan admin-frame --}}
+  {{-- Wrapper khusus user --}}
   <div class="user-frame">
-    {{-- Sidebar --}}
+    {{-- ===== SIDEBAR ===== --}}
     <aside class="side">
       <div class="side-head">
         <button id="btnSideToggle" class="side-toggle" type="button" aria-label="Buka/tutup menu">
-          <svg class="ico" viewBox="0 0 24 24" fill="currentColor">
-            <rect x="3" y="5" width="18" height="2" rx="1" />
-            <rect x="3" y="11" width="18" height="2" rx="1" />
-            <rect x="3" y="17" width="18" height="2" rx="1" />
+          <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="2" rx="1"></rect>
+            <rect x="3" y="11" width="18" height="2" rx="1"></rect>
+            <rect x="3" y="17" width="18" height="2" rx="1"></rect>
           </svg>
         </button>
         <span class="side-title">Menu</span>
       </div>
 
+      @php $is = fn($p) => request()->is($p); @endphp
       <nav class="side-nav">
-        @php $is = fn($p) => request()->is($p); @endphp
-
         <a href="{{ route('dashboard') }}" class="side-item {{ $is('dashboard') ? 'side-item--active' : '' }}">
           <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 3 10h3v8h5v-5h2v5h5v-8h3z"/></svg>
           <span>Beranda</span>
@@ -55,10 +54,11 @@
         </a>
       </nav>
     </aside>
+    {{-- ===== /SIDEBAR ===== --}}
 
-    {{-- Konten --}}
+    {{-- ===== KONTEN ===== --}}
     <main class="content">
-      {{-- Topbar kanan --}}
+      {{-- Topbar kanan: profil + logout --}}
       <div class="topbar" x-data="{ openUser:false }">
         <div class="relative">
           <button class="avatar-btn" @click="openUser=!openUser">
@@ -70,7 +70,7 @@
 
           <div x-cloak x-show="openUser" @click.outside="openUser=false"
                x-transition.origin.top.right
-               class="dropdown right-0 w-72">
+               class="dropdown right-0 w-72" style="z-index:9999">
             <div class="p-4 border-b border-black/10">
               <div class="font-semibold">{{ Auth::user()->name ?? 'User' }}</div>
               <div class="text-xs opacity-70">Pengguna</div>
@@ -83,7 +83,9 @@
               <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="menu-link w-full text-left">
-                  <svg class="menu-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M16 17l1.41-1.41L14.83 13H21v-2h-6.17l2.58-2.59L16 7l-5 5 5 5zM4 5h7V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7v-2H4z"/></svg>
+                  <svg class="menu-ico" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16 17l1.41-1.41L14.83 13H21v-2h-6.17l2.58-2.59L16 7l-5 5 5 5zM4 5h7V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7v-2H4z"/>
+                  </svg>
                   Keluar
                 </button>
               </form>
@@ -92,9 +94,10 @@
         </div>
       </div>
 
-      {{-- Tempat konten halaman --}}
+      {{-- Konten halaman specific --}}
       @yield('content')
     </main>
+    {{-- ===== /KONTEN ===== --}}
   </div>
 
   @stack('scripts')

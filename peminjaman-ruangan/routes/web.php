@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoomController;
-use App\Http\Controllers\Admin\LoanController;
+use App\Http\Controllers\Admin\LoanController as AdminLoanController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\ManageUserController;
+use App\Http\Controllers\User\LoanController as UserLoanController;
 
 // ================== Redirect root & /admin ==================
 Route::get('/admin', fn () => redirect()->route('admin.dashboard'));
@@ -28,9 +29,15 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', fn () => view('user.dashboard'))->name('dashboard');
 
+    // Profile
     Route::get('/profile',  [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile',[ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile',[ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // ===== Loans (User) =====
+    Route::get('/loans/create', [UserLoanController::class, 'create'])->name('loans.create');
+    Route::post('/loans',        [UserLoanController::class, 'store'])->name('loans.store');
+    Route::get('/loans/mine',    [UserLoanController::class, 'mine'])->name('loans.mine');
 });
 
 // ================== ADMIN ROUTES ==================
@@ -41,33 +48,22 @@ Route::middleware(['auth', 'isAdmin'])
         // Dashboard admin
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Manajemen Ruangan (CRUD)
-    Route::resource('rooms', RoomController::class);
+        // Rooms (CRUD) — cukup resource, hapus duplikasi manual
+        Route::resource('rooms', RoomController::class);
 
-        // Permintaan Peminjaman (Loans)
-        Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
-        Route::put('loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
-        Route::put('loans/{loan}/reject',  [LoanController::class, 'reject'])->name('loans.reject');
-        // Manajemen Ruangan (CRUD)
-        Route::get('/rooms', [RoomController::class,'index'])->name('rooms');
-        Route::post('/rooms', [RoomController::class,'store'])->name('store');
-        Route::put('/rooms/{room}', [RoomController::class,'update'])->name('update');
-        Route::delete('/rooms/{room}', [RoomController::class,'destroy'])->name('destroy');
+        // Loans (moderasi)
+        Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
+        Route::put('loans/{loan}/approve', [AdminLoanController::class, 'approve'])->name('loans.approve');
+        Route::put('loans/{loan}/reject',  [AdminLoanController::class, 'reject'])->name('loans.reject');
 
-        // Jadwal Pemakaian
+        // Jadwal & Statistik
         Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
+        Route::get('stats',    [StatsController::class, 'index'])->name('stats');
 
-        // Statistik Pemakaian
-        Route::get('stats', [StatsController::class, 'index'])->name('stats');
-        // Manajemen User
-
-    Route::resource('manageuser', ManageUserController::class)->names([
-        'index'   => 'manageuser',
-        // 'store'   => 'manageuser',
-        // 'update'  => 'manageuser',
-        // 'destroy' => 'manageuser',
-    ])->except(['create','edit','show']);
-
+        // Manage User (index/store/update/destroy)
+        Route::resource('manageuser', ManageUserController::class)->names([
+            'index' => 'manageuser',
+        ])->except(['create','edit','show']);
     });
 
 // ================== AUTH ROUTES ==================
