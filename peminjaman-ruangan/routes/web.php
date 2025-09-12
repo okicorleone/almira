@@ -27,6 +27,7 @@ Route::get('/', function () {
 
 // ================== USER ROUTES ==================
 Route::middleware(['auth'])->group(function () {
+    // Dashboard user
     Route::get('/dashboard', fn () => view('user.dashboard'))->name('dashboard');
 
     // Profile
@@ -34,7 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile',[ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile',[ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // ===== Loans (User) =====
+    // Loans (User)
     Route::get('/loans/create', [UserLoanController::class, 'create'])->name('loans.create');
     Route::post('/loans',        [UserLoanController::class, 'store'])->name('loans.store');
     Route::get('/loans/mine',    [UserLoanController::class, 'mine'])->name('loans.mine');
@@ -45,13 +46,13 @@ Route::middleware(['auth', 'isAdmin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        // Dashboard admin
+        // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Rooms (CRUD) — cukup resource, hapus duplikasi manual
+        // Rooms (CRUD)
         Route::resource('rooms', RoomController::class);
 
-        // Loans (moderasi)
+        // Loans (moderasi admin)
         Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
         Route::put('loans/{loan}/approve', [AdminLoanController::class, 'approve'])->name('loans.approve');
         Route::put('loans/{loan}/reject',  [AdminLoanController::class, 'reject'])->name('loans.reject');
@@ -64,6 +65,10 @@ Route::middleware(['auth', 'isAdmin'])
         Route::resource('manageuser', ManageUserController::class)->names([
             'index' => 'manageuser',
         ])->except(['create','edit','show']);
+
+        // Notifications (AJAX polling)
+        Route::get('/notifications/latest', [DashboardController::class, 'latestNotifications'])
+            ->name('notifications.latest');
     });
 
 // ================== AUTH ROUTES ==================

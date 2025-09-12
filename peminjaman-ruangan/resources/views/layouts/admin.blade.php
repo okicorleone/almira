@@ -94,17 +94,7 @@
                x-transition.origin.top.right
                class="dropdown w-80 right-0">
             <div class="dropdown-title">Notifikasi</div>
-            <ul class="divide-y divide-black/10 max-h-72 overflow-auto">
-              {{-- contoh item --}}
-              <li class="px-4 py-3 text-sm">
-                <div class="font-semibold">Permintaan baru</div>
-                <div class="opacity-80">Annisa mengajukan peminjaman Ruang 3.</div>
-                <div class="text-xs opacity-70 mt-1">Baru saja</div>
-              </li>
-              <li class="px-4 py-3 text-sm">
-                <div class="font-semibold">Jadwal mulai 30 menit lagi</div>
-                <div class="opacity-80">Ruang 2 — Meeting Improvement</div>
-              </li>
+            <ul id="notif-list" class="divide-y divide-black/10 max-h-72 overflow-auto">
             </ul>
             <div class="p-3 text-center text-sm"><a href="{{ url('/admin/loans') }}" class="underline">Lihat semua</a></div>
           </div>
@@ -155,5 +145,48 @@
   </div>
 
   @stack('scripts')
-</body>
+  <script>
+  async function fetchNotifications() {
+      try {
+          let res = await fetch("{{ route('admin.notifications.latest') }}");
+          let data = await res.json();
+
+          let list = document.getElementById("notif-list");
+          list.innerHTML = "";
+
+          // Permintaan terbaru
+          if (data.latestRequest) {
+              list.innerHTML += `
+                  <li class="px-4 py-3 text-sm">
+                      <div class="font-semibold">Permintaan baru</div>
+                      <div class="opacity-80">${data.latestRequest.pemohon} mengajukan peminjaman ${data.latestRequest.ruangan} — ${data.latestRequest.agenda}</div>
+                      <div class="text-xs opacity-70 mt-1">${data.latestRequest.waktu}</div>
+                  </li>
+              `;
+          }
+
+          // Jadwal terdekat
+          if (data.nearestSchedule) {
+              list.innerHTML += `
+                  <li class="px-4 py-3 text-sm">
+                      <div class="font-semibold">Jadwal segera dimulai</div>
+                      <div class="opacity-80">${data.nearestSchedule.ruangan} — ${data.nearestSchedule.agenda}</div>
+                      <div class="text-xs opacity-70 mt-1">${data.nearestSchedule.countdown}</div>
+                  </li>
+              `;
+          }
+
+          if (!data.latestRequest && !data.nearestSchedule) {
+              list.innerHTML = `<li class="px-4 py-3 text-sm opacity-70">Tidak ada notifikasi</li>`;
+          }
+
+      } catch (err) {
+          console.error("Gagal fetch notifikasi", err);
+      }
+  }
+
+  fetchNotifications();
+  setInterval(fetchNotifications, 30000); // refresh tiap 30 detik
+  </script>
+  </body>
 </html>

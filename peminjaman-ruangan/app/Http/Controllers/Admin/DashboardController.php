@@ -10,6 +10,7 @@ use App\Models\Booking;
 use App\Models\Room;
 use Carbon\Carbon;
 
+
 class DashboardController extends Controller
 {
     public function index(Request $request)
@@ -53,6 +54,48 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact('recentBookings', 'pendingRequests',
         'todayBookings', 'todayCount', 'monthCount', 'availableRooms', 'labels', 'data', 'query','month', 'year', 'room','rooms'));
+    }
+
+    
+    public function latestNotifications()
+    {
+        // Permintaan terbaru (status pending)
+        $latestRequest = Booking::with(['user','room'])
+            ->where('status', 'pending')
+            ->latest()
+            ->first();
+
+        // Jadwal terdekat (setelah waktu sekarang)
+        $nearestSchedule = Booking::with('room')
+            ->where('status', 'approved')
+            ->where('tanggal', Carbon::today())
+            ->where('jam', '>=', Carbon::now()->format('H:i:s'))
+            ->orderBy('jam', 'asc')
+            ->first();
+
+        // Helper: hitung selisih waktu
+        // if ($latestRequest && $latestRequest->booking) {
+        //     $timeDiff = \Carbon\Carbon::parse($latestRequest->booking->created_at)
+        //                 ->diffForHumans(); // atau format('d M Y H:i')
+        // } else {
+        //     $timeDiff = null;
+        // }
+
+
+        return response()->json([
+            'latestRequest' => $latestRequest ? [
+                'pemohon' => $latestRequest->user->name ?? 'Unknown',
+                'ruangan' => $latestRequest->room->nama ?? 'Unknown',
+                'agenda'  => $latestRequest->agenda,
+                'waktu'   => Carbon::parse($latestRequest->created_at)->diffForHumans(),
+            ] : null,
+
+            'nearestSchedule' => $nearestSchedule ? [
+                'ruangan' => $nearestSchedule->room->nama ?? 'Unknown',
+                'agenda'  => $nearestSchedule->agenda,
+                'countdown' => Carbon::parse($nearestSchedule->jam)->diffForHumans(),
+            ] : null,
+        ]);
     }
 }
 

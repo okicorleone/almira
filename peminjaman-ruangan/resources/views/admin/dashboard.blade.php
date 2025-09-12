@@ -32,7 +32,7 @@
                     <td>{{ $booking->room->nama ?? '-' }}</td>
                     <td>{{ $booking->user->role ?? '-' }}</td>
                     <td>{{ $booking->agenda }}</td>
-                    <td>{{ $booking->created_at }}</td>
+                    <td>{{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y H:i') }}</td>
                   </tr>
                 @empty
                   <tr>
