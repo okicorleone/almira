@@ -16,6 +16,7 @@
     'resources/css/app.css',
     'resources/css/user.css',
     'resources/js/app.js',
+    'resources/js/user.js',
   ])
 
   <style>[x-cloak]{display:none!important}</style>

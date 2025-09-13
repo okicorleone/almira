@@ -1,33 +1,53 @@
-@extends('layouts.app')
+@extends('layouts.user')
 @section('title','Pengajuan Saya')
 
-@push('styles')
-  @vite(['resources/css/user.css'])
-@endpush
-
 @section('content')
-<div class="user-frame">
-  <main class="content">
-    <h1 class="page-pill">Pengajuan Saya</h1>
+  <h1 class="page-pill">Pengajuan Saya</h1>
 
-    <section class="neo-card">
-      <div class="list-y">
-        @forelse($loans as $l)
-          <div class="list-row">
-            <div>
-              <div class="font-semibold">{{ $l->room->nama ?? 'Ruangan' }}</div>
-              <div class="text-xs opacity-80">
-                {{ \Carbon\Carbon::parse($l->start)->format('d M Y H:i') }}
-                – {{ \Carbon\Carbon::parse($l->end)->format('H:i') }}
-              </div>
-            </div>
-            <span class="chip">{{ ucfirst($l->status ?? 'pending') }}</span>
-          </div>
-        @empty
-          <div class="text-center text-gray-600 py-8">Belum ada pengajuan.</div>
-        @endforelse
-      </div>
-    </section>
-  </main>
-</div>
+  <div class="board">
+    <div class="neo-card overflow-x-auto">
+      <table class="loan-table">
+        <thead>
+          <tr>
+            <th>Tanggal Booking</th>
+            <th>Tanggal Peminjaman</th>
+            <th>Nama Ruangan</th>
+            <th>Agenda</th>
+            <th>Jumlah Peserta</th>
+            <th>Waktu Mulai</th>
+            <th>Waktu Selesai</th>
+            <th>List Kebutuhan</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($loans as $loan)
+            <tr>
+              <td>{{ \Carbon\Carbon::parse($loan->created_at)->format('d/m/Y') }}</td>
+              <td>{{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('d/m/Y') }}</td>
+              <td>{{ $loan->ruangan->nama }}</td>
+              <td>{{ $loan->agenda }}</td>
+              <td>{{ $loan->jumlah_peserta }}</td>
+              <td>{{ $loan->jam_mulai }}</td>
+              <td>{{ $loan->jam_selesai }}</td>
+              <td>{{ $loan->kebutuhan }}</td>
+              <td>
+                @if($loan->status == 'disetujui')
+                  <span class="status-pill status-yes">Disetujui</span>
+                @elseif($loan->status == 'ditolak')
+                  <span class="status-pill status-no">Ditolak</span>
+                @else
+                  <span class="status-pill status-wait">Menunggu</span>
+                @endif
+              </td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="9" class="text-center py-4">Belum ada pengajuan</td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
+  </div>
 @endsection
