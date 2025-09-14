@@ -8,7 +8,7 @@
   {{-- Toolbar: Search + Tambah --}}
   <div class="toolbar mt-6 mb-4 flex items-center justify-between gap-3">
     {{-- NOTE: index route dari resource = admin.rooms.index --}}
-    <form action="{{ route('admin.rooms') }}" method="GET" class="search">
+    <form action="{{ route('admin.rooms.index') }}" method="GET" class="search">
       <div class="search-wrap">
         <svg class="search-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M15.5 14h-.8l-.3-.3a6.5 6.5 0 1 0-.7.7l.3.3v.8L20 21.5 21.5 20 15.5 14Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/>
@@ -78,60 +78,58 @@
 
   {{-- TAMBAH --}}
   <x-neo-modal show="showAdd" title="Tambahkan<br>Ruangan">
-    {{-- NOTE: store route dari resource = admin.rooms.store --}}
-    <form method="POST" action="{{ route('admin.rooms') }}" class="space-y-6">
+    <form method="POST" action="{{ route('admin.rooms.store') }}" class="space-y-6">
       @csrf
       <div>
         <label class="block font-semibold text-xl mb-2">Nama Ruangan</label>
-        <input x-model="formAdd.name" name="nama" required
-               class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
+        <input x-model="formAdd.nama" name="nama" required
+              class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
       </div>
       <div>
         <label class="block font-semibold text-xl mb-2">Lantai</label>
-        <input x-model="formAdd.floor" name="lantai" required
-               class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
+        <input x-model="formAdd.lantai" name="lantai" required
+              class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
       </div>
       <div>
         <label class="block font-semibold text-xl mb-2">Deskripsi Ruangan</label>
-        <textarea x-model="formAdd.description" name="deskripsi" rows="4"
-                  class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400"></textarea>
+        <textarea x-model="formAdd.deskripsi" name="deskripsi" rows="4"
+                  class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400"></textarea>
       </div>
 
       <div class="flex justify-center gap-4">
         <button type="button" @click="reset()"
-                class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow-[0_6px_0_#6b7280]">Batal</button>
+                class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow">Batal</button>
         <button type="submit"
-                class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow-[0_6px_0_#4b5563]">OK</button>
+                class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow">OK</button>
       </div>
     </form>
   </x-neo-modal>
 
   {{-- EDIT --}}
   <x-neo-modal show="showEdit" title="Edit Ruangan">
-    {{-- NOTE: update route = admin.update (PUT /admin/rooms/{room}) --}}
-    <form method="POST" :action= "editAction()"  class="space-y-6" id="formEdit">
+    <form method="POST" :action="editAction()" class="space-y-6" id="formEdit">
       @csrf
       @method('PUT')
       <div>
         <label class="block font-semibold text-xl mb-2">Nama Ruangan</label>
         <input x-model="formEdit.nama" name="nama" required
-               class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
+              class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
       </div>
       <div>
         <label class="block font-semibold text-xl mb-2">Lantai</label>
         <input x-model="formEdit.lantai" name="lantai" required
-               class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
+              class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
       </div>
       <div>
         <label class="block font-semibold text-xl mb-2">Deskripsi Ruangan</label>
         <textarea x-model="formEdit.deskripsi" name="deskripsi" rows="4"
-                  class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400"></textarea>
+                  class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400"></textarea>
       </div>
       <div class="flex justify-center gap-4">
         <button type="button" @click="reset()"
-                class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow-[0_6px_0_#6b7280]">Batal</button>
+                class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow">Batal</button>
         <button type="submit"
-                class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow-[0_6px_0_#4b5563]">OK</button>
+                class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow">OK</button>
       </div>
     </form>
   </x-neo-modal>
@@ -143,17 +141,16 @@
         <span class="text-5xl leading-none text-emerald-500">?</span>
       </div>
       <p class="text-gray-600 mb-6">
-        Anda yakin akan menghapus ruangan “<span x-text="del.name"></span>”?
+        Anda yakin akan menghapus ruangan “<span x-text="del.nama"></span>”?
       </p>
 
-      {{-- NOTE: destroy route = admin.rooms.destroy/{room} (DELETE) --}}
       <form method="POST" :action="deleteAction()" class="flex justify-center gap-4">
         @csrf
         @method('DELETE')
         <button type="button" @click="reset()"
-                class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow-[0_6px_0_#6b7280]">Batal</button>
+                class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow">Batal</button>
         <button type="submit"
-                class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow-[0_6px_0_#4b5563]">OK</button>
+                class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow">OK</button>
       </form>
     </div>
   </x-neo-modal>

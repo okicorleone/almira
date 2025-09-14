@@ -46,14 +46,18 @@ Route::middleware(['auth', 'isAdmin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Manajemen Ruangan (CRUD)
-        Route::get('/rooms', [RoomController::class,'index'])->name('rooms');
-        Route::post('/rooms', [RoomController::class,'store'])->name('store');
-        Route::put('/rooms/{room}', [RoomController::class,'update'])->name('update');
-        Route::delete('/rooms/{room}', [RoomController::class,'destroy'])->name('destroy');
+        // // Manajemen Ruangan (CRUD)
+        // Route::get('/rooms', [RoomController::class,'index'])->name('rooms');
+        // Route::post('/rooms', [RoomController::class,'store'])->name('store');
+        // Route::put('/rooms/{room}', [RoomController::class,'update'])->name('update');
+        // Route::delete('/rooms/{room}', [RoomController::class,'destroy'])->name('destroy');
+    
+        // Manajemen Ruangan (CRUD) - alternatif Route::resource
+        Route::resource('rooms', RoomController::class);
 
         // Loans (moderasi admin)
         Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
