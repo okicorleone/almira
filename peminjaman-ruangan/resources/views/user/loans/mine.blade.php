@@ -25,7 +25,7 @@
             <tr>
               <td>{{ \Carbon\Carbon::parse($loan->created_at)->format('d/m/Y') }}</td>
               <td>{{ \Carbon\Carbon::parse($loan->tanggal_pinjam)->format('d/m/Y') }}</td>
-              <td>{{ $loan->ruangan->nama }}</td>
+              <td>{{ $loan->room_id }}</td>
               <td>{{ $loan->agenda }}</td>
               <td>{{ $loan->jumlah_peserta }}</td>
               <td>{{ $loan->jam_mulai }}</td>

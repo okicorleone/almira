@@ -49,8 +49,11 @@ Route::middleware(['auth', 'isAdmin'])
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Rooms (CRUD)
-        Route::resource('rooms', RoomController::class);
+        // Manajemen Ruangan (CRUD)
+        Route::get('/rooms', [RoomController::class,'index'])->name('rooms');
+        Route::post('/rooms', [RoomController::class,'store'])->name('store');
+        Route::put('/rooms/{room}', [RoomController::class,'update'])->name('update');
+        Route::delete('/rooms/{room}', [RoomController::class,'destroy'])->name('destroy');
 
         // Loans (moderasi admin)
         Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
