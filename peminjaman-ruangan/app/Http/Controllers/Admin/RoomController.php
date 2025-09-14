@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Room;
-use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
@@ -14,17 +13,17 @@ class RoomController extends Controller
      */
     public function index(Request $request)
     {
-    $query = Room::query();
+        $query = Room::query();
 
-    if ($request->has('search') && $request->search != '') {
-        $query->where('nama', 'like', '%' . $request->search . '%')
-              ->orWhere('lantai', 'like', '%' . $request->search . '%')
-              ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
-    }
+        if ($request->has('search') && $request->search != '') {
+            $query->where('nama', 'like', '%' . $request->search . '%')
+                  ->orWhere('lantai', 'like', '%' . $request->search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+        }
 
-    $rooms = $query->get();
+        $rooms = $query->get();
 
-    return view('admin.rooms', compact('rooms'));
+        return view('admin.rooms', compact('rooms'));
     }
 
     /**
@@ -46,30 +45,17 @@ class RoomController extends Controller
             'deskripsi' => 'nullable|string',
         ]);
 
-        Room::create([
-            'nama' => $request->nama,
-            'lantai' => $request->lantai,
-            'deskripsi' => $request->deskripsi,
-        ]);
+        Room::create($request->only(['nama','lantai','deskripsi']));
 
-        return redirect()->route('admin.rooms')->with('success', 'Ruangan berhasil ditambahkan');
-    }
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return redirect()->route('admin.rooms.index')->with('success', 'Ruangan berhasil ditambahkan');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Room $room)
     {
-        return view('admin.rooms', compact('room'));
+        return view('admin.rooms.edit', compact('room'));
     }
 
     /**
@@ -78,18 +64,14 @@ class RoomController extends Controller
     public function update(Request $request, Room $room)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'floor' => 'required|integer',
-            'description' => 'nullable|string',
+            'nama' => 'required|string|max:255',
+            'lantai' => 'required|integer',
+            'deskripsi' => 'nullable|string',
         ]);
 
-        $room->update([
-            'nama' => $request->name,
-            'lantai' => $request->floor,
-            'deskripsi' => $request->description,
-        ]);
+        $room->update($request->only(['nama','lantai','deskripsi']));
 
-        return redirect()->route('admin.rooms')->with('success', 'Ruangan berhasil diperbarui');
+        return redirect()->route('admin.rooms.index')->with('success', 'Ruangan berhasil diperbarui');
     }
 
     /**
@@ -98,8 +80,7 @@ class RoomController extends Controller
     public function destroy(Room $room)
     {
         $room->delete();
-        return redirect()->route('admin.rooms')->with('success', 'Ruangan berhasil dihapus');
-    }
-    
 
+        return redirect()->route('admin.rooms.index')->with('success', 'Ruangan berhasil dihapus');
+    }
 }
