@@ -8,13 +8,13 @@
 
   {{-- ==== Toolbar (copy persis dari rooms): Search kiri + Tombol/Filter kanan ==== --}}
   <div class="toolbar mt-6 mb-4 flex items-center justify-between gap-3">
-    <form action="{{ url('/admin/loans') }}" method="GET" class="search">
+    <form action="{{ route('admin.loans.index') }}" method="GET" class="search">
       <div class="search-wrap">
         {{-- KACA PEMBESAR KECIL (20px) --}}
         <svg class="search-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M15.5 14h-.8l-.3-.3a6.5 6.5 0 1 0-.7.7l.3.3v.8L20 21.5 21.5 20 15.5 14Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/>
         </svg>
-        <input type="text" name="q" placeholder="Cari…" class="search-input" value="{{ request('q') }}">
+        <input type="text" name="search" placeholder="Cari…" class="search-input" value="{{ request('search') }}">
       </div>
     </form>
 
@@ -24,11 +24,7 @@
         <select name="room" onchange="this.form.submit()" class="chip">
           <option value="">Filter Ruangan</option>
           @php
-            $rooms = $rooms ?? [
-              ['id'=>1,'nama'=>'L7 - RUANG MEETING 1'],
-              ['id'=>2,'nama'=>'L7 - RUANG MEETING 2'],
-              ['id'=>3,'nama'=>'L7 - RUANG MEETING 3'],
-            ];
+            $rooms = $rooms ?? [];
           @endphp
           @foreach ($rooms as $room)
             @php $rid = is_array($room)?$room['id']:$room->id; @endphp
@@ -82,35 +78,22 @@
         </thead>
         <tbody>
           @php
-            // dummy agar tampilan langsung terlihat
-            $loans = $loans ?? [[
-              'id'=>101,
-              'booked_at'=>'2025-07-11 14:00:45',
-              'date'=>'2025-07-17',
-              'room'=>'L7 - RUANG MEETING 3',
-              'user'=>'Annisa Fernanda',
-              'dept'=>'Ecare Telkomsel',
-              'agenda'=>'Meeting Improvement',
-              'count'=>10,
-              'start'=>'09:00:00',
-              'end'=>'12:00:00',
-              'needs'=>'TV + Kursi',
-            ]];
+            $loans = $loans ?? [];
           @endphp
 
           @forelse ($loans as $L)
             @php
               $id      = is_array($L)?$L['id']:$L->id;
-              $booked  = is_array($L)?$L['booked_at']:$L->booked_at;
-              $date    = is_array($L)?$L['date']:$L->date;
+              $booked  = is_array($L)?$L['booked_at']:$L->created_at;
+              $date    = is_array($L)?$L['date']:$L->tanggal;
               $room    = is_array($L)?$L['room']:$L->room->nama;
               $user    = is_array($L)?$L['user']:$L->user->name;
-              $dept    = is_array($L)?$L['dept']:$L->department;
+              $dept    = is_array($L)?$L['dept']:$L->user->role;
               $agenda  = is_array($L)?$L['agenda']:$L->agenda;
               $count   = is_array($L)?$L['count']:$L->jumlah_peserta;
-              $start   = is_array($L)?$L['start']:$L->jam_mulai;
+              $start   = is_array($L)?$L['start']:$L->jam;
               $end     = is_array($L)?$L['end']:$L->jam_selesai;
-              $needs   = is_array($L)?$L['needs']:$L->kebutuhan;
+              $needs   = is_array($L)?$L['needs']:$L->list_kebutuhan;
             @endphp
             <tr>
               <td class="py-4 px-6">{{ \Carbon\Carbon::parse($booked)->translatedFormat('d M Y, H:i:s') }}</td>
@@ -120,8 +103,8 @@
               <td class="py-4 px-6">{{ $dept }}</td>
               <td class="py-4 px-6">{{ $agenda }}</td>
               <td class="py-4 px-6 text-center">{{ $count }}</td>
-              <td class="py-4 px-6">{{ \Carbon\Carbon::createFromFormat('H:i:s',$start)->format('H:i') }}</td>
-              <td class="py-4 px-6">{{ \Carbon\Carbon::createFromFormat('H:i:s',$end)->format('H:i') }}</td>
+              <td class="py-4 px-6">{{ $start ? \Carbon\Carbon::parse($start)->format('H:i') : '-' }}</td>
+              <td class="py-4 px-6">{{ $end ? \Carbon\Carbon::parse($end)->format('H:i') : '-' }}</td>
               <td class="py-4 px-6">{{ $needs }}</td>
               <td class="py-4 px-6">
                 <div class="flex items-center gap-4">

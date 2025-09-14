@@ -49,20 +49,15 @@ Route::middleware(['auth', 'isAdmin'])
 
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-        // // Manajemen Ruangan (CRUD)
-        // Route::get('/rooms', [RoomController::class,'index'])->name('rooms');
-        // Route::post('/rooms', [RoomController::class,'store'])->name('store');
-        // Route::put('/rooms/{room}', [RoomController::class,'update'])->name('update');
-        // Route::delete('/rooms/{room}', [RoomController::class,'destroy'])->name('destroy');
     
         // Manajemen Ruangan (CRUD) - alternatif Route::resource
         Route::resource('rooms', RoomController::class);
 
         // Loans (moderasi admin)
-        Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
-        Route::put('loans/{loan}/approve', [AdminLoanController::class, 'approve'])->name('loans.approve');
-        Route::put('loans/{loan}/reject',  [AdminLoanController::class, 'reject'])->name('loans.reject');
+        Route::resource('loans', App\Http\Controllers\Admin\LoanController::class);
+        // Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
+        // Route::put('loans/{loan}/approve', [AdminLoanController::class, 'approve'])->name('loans.approve');
+        // Route::put('loans/{loan}/reject',  [AdminLoanController::class, 'reject'])->name('loans.reject');
 
         // Jadwal & Statistik
         Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
