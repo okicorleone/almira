@@ -58,9 +58,9 @@
   </div>
 
   {{-- ==== TABEL ==== --}}
-  <section class="neo-card p-0 overflow-hidden">
-    <div class="table-wrap">
-      <table class="neo-table w-full">
+  <section class="neo-card p-0">
+    <div class="table-wrap overflow-x-auto">
+      <table class="neo-table min-w-full">
         <thead>
           <tr>
             <th class="py-3 px-6">Tanggal Booking</th>
