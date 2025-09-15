@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Booking; // atau Loan jika kamu pakai model Loan
 use App\Models\Room;
+use App\Models\Notification;
 
 
 class LoanController extends Controller
@@ -57,14 +58,31 @@ class LoanController extends Controller
     public function approve(\App\Models\Booking $loan)
     {
         $loan->update(['status' => 'approved']);
+
+        // tambahkan notifikasi ke user yang booking
+        Notification::create([
+            'user_id' => $loan->user_id,
+            'message' => "Booking kamu untuk ruangan {$loan->room->nama} telah disetujui.",
+        ]);
+
         return redirect()->route('admin.loans.index')->with('success', 'Pinjaman berhasil diterima');
     }
 
     public function reject(\App\Models\Booking $loan)
     {
         $loan->update(['status' => 'rejected']);
+
+        // tambahkan notifikasi ke user yang booking
+        Notification::create([
+            'user_id' => $loan->user_id,
+            'message' => "Booking kamu untuk ruangan {$loan->room->nama} ditolak.",
+        ]);
+
         return redirect()->route('admin.loans.index')->with('success', 'Pinjaman berhasil ditolak');
     }
+
+
+
 
 
     // public function update(Request $request, Room $room ,Booking $loan)

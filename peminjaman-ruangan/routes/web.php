@@ -70,6 +70,10 @@ Route::middleware(['auth', 'isAdmin'])
         // Notifications (AJAX polling)
         Route::get('/notifications/latest', [DashboardController::class, 'latestNotifications'])
             ->name('notifications.latest');
+        Route::post('/admin/notifications/read', [NotificationController::class, 'markAllRead'])
+            ->name('admin.notifications.read');
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::put('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     });
 
 // ================== AUTH ROUTES ==================

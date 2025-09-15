@@ -86,7 +86,9 @@
           <button class="icon-btn" aria-label="Notifikasi" @click="openNotif=!openNotif; openUser=false">
             <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor"><path d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2Zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1l-2-2Z"/></svg>
             {{-- indikator notif --}}
-            <span class="ping" aria-hidden="true"></span>
+            @if($unreadCount > 0)
+              <span class="ping" aria-hidden="true"></span>
+            @endif
           </button>
 
           {{-- panel notif --}}
@@ -145,6 +147,8 @@
   </div>
 
   @stack('scripts')
+  <script src="//unpkg.com/alpinejs" defer></script>
+
   <script>
   async function fetchNotifications() {
       try {
@@ -188,5 +192,32 @@
   fetchNotifications();
   setInterval(fetchNotifications, 30000); // refresh tiap 30 detik
   </script>
+  <script>
+  document.addEventListener("alpine:init", () => {
+      Alpine.data("notifDropdown", () => ({
+          openNotif: false,
+
+          toggleNotif() {
+              this.openNotif = !this.openNotif;
+
+              if (this.openNotif) {
+                  // Panggil endpoint untuk menandai sebagai read
+                  fetch("/admin/notifications/read", {
+                      method: "POST",
+                      headers: {
+                          "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                          "Accept": "application/json"
+                      },
+                  }).then(() => {
+                      // Hilangkan indikator bulatan merah
+                      const ping = document.querySelector(".ping");
+                      if (ping) ping.remove();
+                  });
+              }
+          }
+      }))
+  })
+  </script>
+
   </body>
 </html>
