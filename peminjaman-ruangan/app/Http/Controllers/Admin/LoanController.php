@@ -12,7 +12,8 @@ class LoanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Booking::with(['room','user']);
+        $query = Booking::with(['room','user'])
+            ->where('status', 'pending');
         // filter pencarian
         if ($request->filled('search')) {
             $search = $request->search;
@@ -52,6 +53,19 @@ class LoanController extends Controller
         return view('admin.loans', compact('loans','rooms'));
 
     }
+
+    public function approve(\App\Models\Booking $loan)
+    {
+        $loan->update(['status' => 'approved']);
+        return redirect()->route('admin.loans.index')->with('success', 'Pinjaman berhasil diterima');
+    }
+
+    public function reject(\App\Models\Booking $loan)
+    {
+        $loan->update(['status' => 'rejected']);
+        return redirect()->route('admin.loans.index')->with('success', 'Pinjaman berhasil ditolak');
+    }
+
 
     // public function update(Request $request, Room $room ,Booking $loan)
     // {

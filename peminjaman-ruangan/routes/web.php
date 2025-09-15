@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoomController;
-use App\Http\Controllers\Admin\LoanController as AdminLoanController;
+use App\Http\Controllers\Admin\LoanController ;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\ManageUserController;
@@ -55,9 +55,8 @@ Route::middleware(['auth', 'isAdmin'])
 
         // Loans (moderasi admin)
         Route::resource('loans', App\Http\Controllers\Admin\LoanController::class);
-        // Route::get('loans', [AdminLoanController::class, 'index'])->name('loans.index');
-        // Route::put('loans/{loan}/approve', [AdminLoanController::class, 'approve'])->name('loans.approve');
-        // Route::put('loans/{loan}/reject',  [AdminLoanController::class, 'reject'])->name('loans.reject');
+        Route::put('loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
+        Route::put('loans/{loan}/reject',  [LoanController::class, 'reject'])->name('loans.reject');
 
         // Jadwal & Statistik
         Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');

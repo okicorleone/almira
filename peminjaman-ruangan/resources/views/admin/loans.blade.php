@@ -109,9 +109,9 @@
               <td class="py-4 px-6">
                 <div class="flex items-center gap-4">
                   <a href="#" class="text-green-600 font-semibold"
-                     @click.prevent="openApprove({id:{{ $id }}, user:'{{ $user }}', room:'{{ str_replace("'","\\'",$room) }}'})">Terima</a>
+                     @click.prevent="openApprove({id:{{ $id }}, user:'{{ $L->user->name }}', room:'{{ str_replace("'","\\'",$L->room->nama) }}'})">Terima</a>
                   <a href="#" class="text-red-600 font-semibold"
-                     @click.prevent="openReject({id:{{ $id }}, user:'{{ $user }}', room:'{{ str_replace("'","\\'",$room) }}'})">Tolak</a>
+                     @click.prevent="openReject({id:{{ $id }}, user:'{{ $L->user->name }}', room:'{{ str_replace("'","\\'",$L->room->nama) }}'})">Tolak</a>
                 </div>
               </td>
             </tr>
@@ -119,6 +119,7 @@
           @empty
             <tr><td colspan="11" class="text-center py-6">Tidak ada data</td></tr>
           @endforelse
+          @stack('scripts')
         </tbody>
       </table>
     </div>
@@ -129,13 +130,10 @@
     <form method="POST" :action="approveAction()" class="text-center space-y-6">
       @csrf @method('PUT')
       <p>Terima permintaan <b x-text="target.user"></b> untuk ruangan <b x-text="target.room"></b> ?</p>
-
-      @slot('footer')
       <div class="flex justify-center gap-4">
         <button type="button" @click="reset()" class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow-[0_6px_0_#6b7280]">Batal</button>
         <button type="submit" class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow-[0_6px_0_#4b5563]">OK</button>
       </div>
-      @endslot
     </form>
   </x-neo-modal>
 
@@ -149,14 +147,14 @@
         <textarea x-model="rejectReason" name="reason" rows="4"
           class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400"></textarea>
       </div>
-
-      @slot('footer')
       <div class="flex justify-center gap-4">
         <button type="button" @click="reset()" class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow-[0_6px_0_#6b7280]">Batal</button>
         <button type="submit" class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow-[0_6px_0_#4b5563]">OK</button>
       </div>
-      @endslot
     </form>
   </x-neo-modal>
 </div>
 @endsection
+@push('scripts')
+  @vite(['resources/js/loans.js'])
+@endpush

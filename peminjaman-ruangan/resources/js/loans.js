@@ -19,9 +19,15 @@ export default function loansPage() {
     reset() {
       this.showApprove = this.showReject = false;
       this.rejectReason = '';
+      this.target = { id: '', user: '', room: '' };
     },
 
     approveAction() { return `/admin/loans/${this.target.id}/approve`; },
     rejectAction()  { return `/admin/loans/${this.target.id}/reject`; },
   };
+}
+
+// supaya bisa dipanggil di x-data="loansPage()"
+if (typeof window !== 'undefined') {
+  window.loansPage = loansPage;
 }
