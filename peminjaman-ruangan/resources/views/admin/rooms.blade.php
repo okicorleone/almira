@@ -26,6 +26,7 @@
 
   {{-- Tabel --}}
   <section class="neo-card p-0 overflow-hidden">
+    <div class="max-h-[500px] overflow-y-auto">
     <div class="px-6 pt-5 pb-2">
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-4"><div class="th-pill">Nama Ruangan</div></div>
@@ -39,6 +40,7 @@
 
     <div class="table-wrap">
       <table class="neo-table">
+        
         <tbody>
           @forelse($rooms as $r)
             <tr>

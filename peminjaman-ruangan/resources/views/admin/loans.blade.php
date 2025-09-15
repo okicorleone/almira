@@ -58,10 +58,12 @@
   </div>
 
   {{-- ==== TABEL ==== --}}
-  <section class="neo-card p-0">
-    <div class="table-wrap overflow-x-auto">
+<section class="neo-card p-0">
+  <div class="table-wrap overflow-x-auto">
+    {{-- batasi tinggi tabel, scroll di sini --}}
+    <div class="max-h-[500px] overflow-y-auto">
       <table class="neo-table min-w-full">
-        <thead>
+        <!-- <thead class="sticky top-0 bg-[#D9D9D9] z-10"> -->
           <tr>
             <th class="py-3 px-6">Tanggal Booking</th>
             <th class="py-3 px-6">Tanggal Peminjaman</th>
@@ -77,10 +79,6 @@
           </tr>
         </thead>
         <tbody>
-          @php
-            $loans = $loans ?? [];
-          @endphp
-
           @forelse ($loans as $L)
             @php
               $id      = is_array($L)?$L['id']:$L->id;
@@ -119,11 +117,12 @@
           @empty
             <tr><td colspan="11" class="text-center py-6">Tidak ada data</td></tr>
           @endforelse
-          @stack('scripts')
         </tbody>
       </table>
     </div>
-  </section>
+  </div>
+</section>
+
 
   {{-- ==== MODAL TERIMA ==== --}}
   <x-neo-modal show="showApprove" title="Terima Permintaan ?" :width="'min(760px,95vw)'">

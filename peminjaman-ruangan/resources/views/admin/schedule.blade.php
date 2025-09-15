@@ -65,6 +65,7 @@
   {{-- Tabel --}}
   <section class="neo-card p-0 overflow-hidden">
     <div class="table-wrap">
+      <div class="max-h-[500px] overflow-y-auto">
       <table class="neo-table w-full">
         <thead>
           <tr>
