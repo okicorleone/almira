@@ -16,10 +16,10 @@ class Loan extends Model
         'room_id',
         'agenda',
         'jumlah_peserta',
-        'tanggal_pinjam',
-        'jam_mulai',
+        'tanggal',
+        'jam',
         'jam_selesai',
-        'kebutuhan',
+        'list_kebutuhan',
         'status',
     ];
 

@@ -7,37 +7,45 @@ use Illuminate\Http\Request;
 use App\Models\Loan;
 use App\Models\Room;
 
-class LoanController extends Controller
-{
+class LoanController extends Controller{
     public function create()
     {
-        $rooms = Room::orderBy('nama')->get();
+        $rooms = Room::all();
         return view('user.loans.create', compact('rooms'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'room_id' => ['required','exists:rooms,id'],
-            'start'   => ['required','date'],
-            'end'     => ['required','date','after:start'],
-            'note'    => ['nullable','string','max:255'],
+        $request->validate([
+            'tanggal' => 'required|date',
+            'room_id' => 'required|exists:rooms,id',
+            'agenda' => 'required|string|max:255',
+            'jumlah_peserta' => 'required|integer|min:1',
+            'jam' => 'required',
+            'jam_selesai' => 'required',
+            'list_kebutuhan' => 'nullable|string',
         ]);
 
-        $data['user_id'] = auth()->id();
-        $data['status']  = 'pending';
+        Loan::create([
+            'user_id'    => auth()->id(),
+            'room_id'    => $request->room_id,
+            'tanggal'    => $request->tanggal,
+            'agenda'     => $request->agenda,
+            'jumlah_peserta'     => $request->jumlah_peserta,
+            'jam'  => $request->jam,
+            'jam_selesai'=> $request->jam_selesai,
+            'list_kebutuhan'  => $request->list_kebutuhan,
+        ]);
 
-        Loan::create($data);
-
-        return redirect()->route('loans.mine')->with('ok','Pengajuan berhasil dibuat.');
+        return redirect()->route('loans.mine')->with('ok', 'Pengajuan berhasil dikirim.');
     }
 
     public function mine()
     {
         $loans = Loan::with('room')
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->get();
+                     ->where('user_id', auth()->id())
+                     ->latest()
+                     ->get();
 
         return view('user.loans.mine', compact('loans'));
     }
