@@ -26,7 +26,7 @@ class LoanController extends Controller{
             'list_kebutuhan' => 'nullable|string',
         ]);
 
-        Loan::create([
+        $loan= Loan::create([
             'user_id'    => auth()->id(),
             'room_id'    => $request->room_id,
             'tanggal'    => $request->tanggal,
@@ -36,6 +36,19 @@ class LoanController extends Controller{
             'jam_selesai'=> $request->jam_selesai,
             'list_kebutuhan'  => $request->list_kebutuhan,
         ]);
+
+        $loan->load('room');
+
+        // === Buat notifikasi untuk semua admin ===
+        $admins = \App\Models\User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            \App\Models\Notification::create([
+                'user_id' => $admin->id,
+                'message' => "Pengajuan pinjaman baru oleh ".auth()->user()->name.
+                            " untuk ruangan ".$loan->room->nama.
+                            " pada ".$loan->tanggal." (".$loan->jam." - ".$loan->jam_selesai.")",
+            ]);
+    }
 
         return redirect()->route('loans.mine')->with('ok', 'Pengajuan berhasil dikirim.');
     }

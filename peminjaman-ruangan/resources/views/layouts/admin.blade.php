@@ -80,10 +80,10 @@
     {{-- Konten + topbar kanan --}}
     <main class="content">
       {{-- === TOPBAR KANAN: Notifikasi + Profil === --}}
-      <div class="topbar" x-data="{ openNotif:false, openUser:false }">
+      <div class="topbar" x-data="notifDropdown">
         {{-- Bell --}}
         <div class="relative">
-          <button class="icon-btn" aria-label="Notifikasi" @click="openNotif=!openNotif; openUser=false">
+          <button class="icon-btn" aria-label="Notifikasi" @click="toggleNotif">
             <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor"><path d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2Zm6-6V11a6 6 0 1 0-12 0v5L4 18v1h16v-1l-2-2Z"/></svg>
             {{-- indikator notif --}}
             @if($unreadCount > 0)
@@ -96,8 +96,7 @@
                x-transition.origin.top.right
                class="dropdown w-80 right-0">
             <div class="dropdown-title">Notifikasi</div>
-            <ul id="notif-list" class="divide-y divide-black/10 max-h-72 overflow-auto">
-            </ul>
+            <ul id="notif-list" class="divide-y divide-black/10 max-h-72 overflow-auto"></ul>
             <div class="p-3 text-center text-sm"><a href="{{ url('/admin/loans') }}" class="underline">Lihat semua</a></div>
           </div>
         </div>
@@ -192,32 +191,33 @@
   fetchNotifications();
   setInterval(fetchNotifications, 30000); // refresh tiap 30 detik
   </script>
+
+  
   <script>
   document.addEventListener("alpine:init", () => {
-      Alpine.data("notifDropdown", () => ({
-          openNotif: false,
+    Alpine.data("notifDropdown", () => ({
+        openNotif: false,
+        toggleNotif() {
+            this.openNotif = !this.openNotif;
 
-          toggleNotif() {
-              this.openNotif = !this.openNotif;
-
-              if (this.openNotif) {
-                  // Panggil endpoint untuk menandai sebagai read
-                  fetch("/admin/notifications/read", {
-                      method: "POST",
-                      headers: {
-                          "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                          "Accept": "application/json"
-                      },
-                  }).then(() => {
-                      // Hilangkan indikator bulatan merah
-                      const ping = document.querySelector(".ping");
-                      if (ping) ping.remove();
-                  });
-              }
+            if (this.openNotif) {
+                // Tandai semua notif sebagai read
+                fetch("{{ route('admin.notifications.readAll') }}", {
+                    method: "PUT",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Accept": "application/json",
+                    },
+                })
+                .then(res => res.json())
+                .then(() => {
+                    const ping = document.querySelector(".ping");
+                    if (ping) ping.remove();
+                });
+            }
           }
       }))
   })
   </script>
-
   </body>
 </html>

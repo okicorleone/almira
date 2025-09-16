@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\ManageUserController;
 use App\Http\Controllers\User\LoanController as UserLoanController;
+use App\Http\Controllers\Admin\NotificationController;
 
 // ================== Redirect root & /admin ==================
 Route::get('/admin', fn () => redirect()->route('admin.dashboard'));
@@ -70,10 +71,16 @@ Route::middleware(['auth', 'isAdmin'])
         // Notifications (AJAX polling)
         Route::get('/notifications/latest', [DashboardController::class, 'latestNotifications'])
             ->name('notifications.latest');
-        Route::post('/admin/notifications/read', [NotificationController::class, 'markAllRead'])
-            ->name('admin.notifications.read');
+
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-        Route::put('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+
+                // Tandai 1 notifikasi terbaca
+        Route::put('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
+            ->name('notifications.read');
+
+        // Tandai semua notifikasi terbaca
+        Route::put('/notifications/read', [NotificationController::class, 'markAllRead'])
+            ->name('notifications.readAll');
     });
 
 // ================== AUTH ROUTES ==================
