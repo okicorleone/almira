@@ -6,27 +6,18 @@
   {{-- Judul --}}
   <h1 class="page-pill">Permintaan Peminjaman</h1>
 
-  {{-- ==== Toolbar (copy persis dari rooms): Search kiri + Tombol/Filter kanan ==== --}}
+  {{-- ==== Toolbar: Search kiri + Filter kanan ==== --}}
   <div class="toolbar mt-6 mb-4 flex items-center justify-between gap-3">
-    <form action="{{ route('admin.loans.index') }}" method="GET" class="search">
-      <div class="search-wrap">
-        {{-- KACA PEMBESAR KECIL (20px) --}}
-        <svg class="search-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M15.5 14h-.8l-.3-.3a6.5 6.5 0 1 0-.7.7l.3.3v.8L20 21.5 21.5 20 15.5 14Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/>
-        </svg>
-        <input type="text" name="search" placeholder="Cari…" class="search-input" value="{{ request('search') }}">
-      </div>
-    </form>
+    {{-- Search pakai komponen --}}
+    <x-search :route="route('admin.loans.index')" name="search" :value="request('search')" />
 
     {{-- Filter chips di kanan --}}
     <div class="flex items-center gap-3">
+      {{-- Filter Ruangan --}}
       <form method="GET" action="{{ url('/admin/loans') }}" class="inline">
         <select name="room" onchange="this.form.submit()" class="chip">
           <option value="">Filter Ruangan</option>
-          @php
-            $rooms = $rooms ?? [];
-          @endphp
-          @foreach ($rooms as $room)
+          @foreach ($rooms ?? [] as $room)
             @php $rid = is_array($room)?$room['id']:$room->id; @endphp
             <option value="{{ $rid }}" {{ (string)request('room')===(string)$rid?'selected':'' }}>
               {{ is_array($room)?$room['nama']:$room->nama }}
@@ -35,6 +26,7 @@
         </select>
       </form>
 
+      {{-- Filter Bulan --}}
       <form method="GET" action="{{ url('/admin/loans') }}" class="inline">
         <select name="month" onchange="this.form.submit()" class="chip">
           <option value="">Filter Bulan</option>
@@ -46,6 +38,7 @@
         </select>
       </form>
 
+      {{-- Filter Tahun --}}
       <form method="GET" action="{{ url('/admin/loans') }}" class="inline">
         <select name="year" onchange="this.form.submit()" class="chip">
           <option value="">Filter Tahun</option>
@@ -58,71 +51,69 @@
   </div>
 
   {{-- ==== TABEL ==== --}}
-<section class="neo-card p-0">
-  <div class="table-wrap overflow-x-auto">
-    {{-- batasi tinggi tabel, scroll di sini --}}
-    <div class="max-h-[500px] overflow-y-auto">
-      <table class="neo-table min-w-full">
-        <!-- <thead class="sticky top-0 bg-[#D9D9D9] z-10"> -->
-          <tr>
-            <th class="py-3 px-6">Tanggal Booking</th>
-            <th class="py-3 px-6">Tanggal Peminjaman</th>
-            <th class="py-3 px-6">Nama Ruangan</th>
-            <th class="py-3 px-6">Pemohon</th>
-            <th class="py-3 px-6">Departemen/Layanan</th>
-            <th class="py-3 px-6">Agenda</th>
-            <th class="py-3 px-6 text-center">Jumlah Peserta</th>
-            <th class="py-3 px-6">Waktu Mulai</th>
-            <th class="py-3 px-6">Waktu Selesai</th>
-            <th class="py-3 px-6">List Kebutuhan</th>
-            <th class="py-3 px-6">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse ($loans as $L)
-            @php
-              $id      = is_array($L)?$L['id']:$L->id;
-              $booked  = is_array($L)?$L['booked_at']:$L->created_at;
-              $date    = is_array($L)?$L['date']:$L->tanggal;
-              $room    = is_array($L)?$L['room']:$L->room->nama;
-              $user    = is_array($L)?$L['user']:$L->user->name;
-              $dept    = is_array($L)?$L['dept']:$L->user->role;
-              $agenda  = is_array($L)?$L['agenda']:$L->agenda;
-              $count   = is_array($L)?$L['count']:$L->jumlah_peserta;
-              $start   = is_array($L)?$L['start']:$L->jam;
-              $end     = is_array($L)?$L['end']:$L->jam_selesai;
-              $needs   = is_array($L)?$L['needs']:$L->list_kebutuhan;
-            @endphp
+  <section class="neo-card p-0">
+    <div class="table-wrap overflow-x-auto">
+      <div class="max-h-[500px] overflow-y-auto">
+        <table class="neo-table min-w-full">
+          <thead>
             <tr>
-              <td class="py-4 px-6">{{ \Carbon\Carbon::parse($booked)->translatedFormat('d M Y, H:i:s') }}</td>
-              <td class="py-4 px-6">{{ \Carbon\Carbon::parse($date)->translatedFormat('d M Y') }}</td>
-              <td class="py-4 px-6">{{ $room }}</td>
-              <td class="py-4 px-6">{{ $user }}</td>
-              <td class="py-4 px-6">{{ $dept }}</td>
-              <td class="py-4 px-6">{{ $agenda }}</td>
-              <td class="py-4 px-6 text-center">{{ $count }}</td>
-              <td class="py-4 px-6">{{ $start ? \Carbon\Carbon::parse($start)->format('H:i') : '-' }}</td>
-              <td class="py-4 px-6">{{ $end ? \Carbon\Carbon::parse($end)->format('H:i') : '-' }}</td>
-              <td class="py-4 px-6">{{ $needs }}</td>
-              <td class="py-4 px-6">
-                <div class="flex items-center gap-4">
-                  <a href="#" class="text-green-600 font-semibold"
-                     @click.prevent="openApprove({id:{{ $id }}, user:'{{ $L->user->name }}', room:'{{ str_replace("'","\\'",$L->room->nama) }}'})">Terima</a>
-                  <a href="#" class="text-red-600 font-semibold"
-                     @click.prevent="openReject({id:{{ $id }}, user:'{{ $L->user->name }}', room:'{{ str_replace("'","\\'",$L->room->nama) }}'})">Tolak</a>
-                </div>
-              </td>
+              <th class="py-3 px-6">Tanggal Booking</th>
+              <th class="py-3 px-6">Tanggal Peminjaman</th>
+              <th class="py-3 px-6">Nama Ruangan</th>
+              <th class="py-3 px-6">Pemohon</th>
+              <th class="py-3 px-6">Departemen/Layanan</th>
+              <th class="py-3 px-6">Agenda</th>
+              <th class="py-3 px-6 text-center">Jumlah Peserta</th>
+              <th class="py-3 px-6">Waktu Mulai</th>
+              <th class="py-3 px-6">Waktu Selesai</th>
+              <th class="py-3 px-6">List Kebutuhan</th>
+              <th class="py-3 px-6">Aksi</th>
             </tr>
-            <tr><td colspan="11"><div class="divider mx-4"></div></td></tr>
-          @empty
-            <tr><td colspan="11" class="text-center py-6">Tidak ada data</td></tr>
-          @endforelse
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @forelse ($loans as $L)
+              @php
+                $id      = is_array($L)?$L['id']:$L->id;
+                $booked  = is_array($L)?$L['booked_at']:$L->created_at;
+                $date    = is_array($L)?$L['date']:$L->tanggal;
+                $room    = is_array($L)?$L['room']:$L->room->nama;
+                $user    = is_array($L)?$L['user']:$L->user->name;
+                $dept    = is_array($L)?$L['dept']:$L->user->role;
+                $agenda  = is_array($L)?$L['agenda']:$L->agenda;
+                $count   = is_array($L)?$L['count']:$L->jumlah_peserta;
+                $start   = is_array($L)?$L['start']:$L->jam;
+                $end     = is_array($L)?$L['end']:$L->jam_selesai;
+                $needs   = is_array($L)?$L['needs']:$L->list_kebutuhan;
+              @endphp
+              <tr>
+                <td class="py-4 px-6">{{ \Carbon\Carbon::parse($booked)->translatedFormat('d M Y, H:i:s') }}</td>
+                <td class="py-4 px-6">{{ \Carbon\Carbon::parse($date)->translatedFormat('d M Y') }}</td>
+                <td class="py-4 px-6">{{ $room }}</td>
+                <td class="py-4 px-6">{{ $user }}</td>
+                <td class="py-4 px-6">{{ $dept }}</td>
+                <td class="py-4 px-6">{{ $agenda }}</td>
+                <td class="py-4 px-6 text-center">{{ $count }}</td>
+                <td class="py-4 px-6">{{ $start ? \Carbon\Carbon::parse($start)->format('H:i') : '-' }}</td>
+                <td class="py-4 px-6">{{ $end ? \Carbon\Carbon::parse($end)->format('H:i') : '-' }}</td>
+                <td class="py-4 px-6">{{ $needs }}</td>
+                <td class="py-4 px-6">
+                  <div class="flex items-center gap-4">
+                    <a href="#" class="text-green-600 font-semibold"
+                       @click.prevent="openApprove({id:{{ $id }}, user:'{{ $L->user->name }}', room:'{{ str_replace("'","\\'",$L->room->nama) }}'})">Terima</a>
+                    <a href="#" class="text-red-600 font-semibold"
+                       @click.prevent="openReject({id:{{ $id }}, user:'{{ $L->user->name }}', room:'{{ str_replace("'","\\'",$L->room->nama) }}'})">Tolak</a>
+                  </div>
+                </td>
+              </tr>
+              <tr><td colspan="11"><div class="divider mx-4"></div></td></tr>
+            @empty
+              <tr><td colspan="11" class="text-center py-6">Tidak ada data</td></tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-</section>
-
+  </section>
 
   {{-- ==== MODAL TERIMA ==== --}}
   <x-neo-modal show="showApprove" title="Terima Permintaan ?" :width="'min(760px,95vw)'">
@@ -154,6 +145,7 @@
   </x-neo-modal>
 </div>
 @endsection
+
 @push('scripts')
   @vite(['resources/js/loans.js'])
 @endpush

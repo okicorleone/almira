@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Booking;   // model booking (kalau tabelnya ada)
-use App\Models\Room;      // model ruangan
-use Carbon\Carbon;
+use App\Models\Booking;
+use App\Models\Room;
 
 class ScheduleController extends Controller
 {
@@ -17,15 +16,21 @@ class ScheduleController extends Controller
         $month  = $request->get('month');
         $year   = $request->get('year');
 
-        // query dasar
-        $query = Booking::with('room');
+        // query dasar: hanya ambil booking yg approved
+        $query = Booking::with(['room','user'])
+            ->where('status', 'approved');
 
+        // filter ruangan
         if ($roomId) {
             $query->where('room_id', $roomId);
         }
+
+        // filter bulan
         if ($month) {
             $query->whereMonth('tanggal', $month);
         }
+
+        // filter tahun
         if ($year) {
             $query->whereYear('tanggal', $year);
         }

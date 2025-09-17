@@ -67,13 +67,13 @@
     padding-right: 12px;
   }
   .side--mini .side-title,
-  .side--mini .side-item span{ display:none; }     /* sembunyikan teks */
+  .side--mini .side-item span{ display:none; }
   .side--mini .side-item{
     justify-content: center;
     padding-left: .5rem; padding-right: .5rem;
   }
   .side--mini .side-item .ico{ margin-right: 0; }
-  .side--mini::after{ right: -18px; width: 32px; } /* glow rapat ke sisi */
+  .side--mini::after{ right: -18px; width: 32px; }
 
   /* Header & tombol hamburger */
   .side-head{ @apply flex items-center gap-3 font-semibold px-3 py-2; color:rgba(255,255,255,.9); }
@@ -105,26 +105,25 @@
   }
   .side-item--active .ico{ color:#3B82F6; }
 
-  /* ----- CONTENT: grid 3 baris (judul / board / KPI) ----- */
+  /* ----- CONTENT ----- */
   .content{
     flex: 1 1 auto;
     min-width: 0;
     height: 100%;
     display: grid;
-    grid-template-rows: auto 1fr auto; /* title / scroll area / kpi */
+    grid-template-rows: auto 1fr auto;
     gap: 24px;
     padding: 24px 28px;
-    overflow: hidden;                  /* yang scroll hanya .board di tengah */
-    position: relative;                /* untuk topbar absolute */
+    overflow: hidden;
+    position: relative;
   }
 
-  /* area tengah yang boleh scroll internal */
+  /* area tengah scroll */
   .board{ min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
   .board::-webkit-scrollbar{ width: 10px; }
   .board::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.22); border-radius: 8px; }
   .board::-webkit-scrollbar-track{ background: transparent; }
 
-  /* helper untuk anak grid/flex yang harus bisa menyusut */
   .col-stretch{ min-height: 0; overflow: hidden; }
   .card-scroll{ height: 100%; overflow: auto; }
 
@@ -170,7 +169,7 @@
   .kpi-label{ @apply text-sm opacity-90 mt-1; }
   #statChart { width: 100% !important; height: 100% !important; }
 
-  /* === TOPBAR di kanan atas === */
+  /* === TOPBAR === */
   .topbar{
     position: absolute;
     top: 12px;
@@ -191,13 +190,11 @@
   }
   .icon-btn:hover{ filter:brightness(.98); }
 
-  /* dot indikator notif */
   .icon-btn .ping{
     position:absolute; top:6px; right:6px; width:8px; height:8px;
     background:#ED1C24; border-radius:9999px; box-shadow:0 0 0 4px rgba(237,28,36,.18);
   }
 
-  /* avatar */
   .avatar-btn{
     display:inline-flex; align-items:center; gap:.5rem;
     background:#D9D9D9; height:40px; padding:0 10px; border-radius:9999px;
@@ -209,7 +206,6 @@
   .avatar-img{ width:26px; height:26px; border-radius:9999px; object-fit:cover; }
   .avatar-name{ font-weight:600; font-size:14px; }
 
-  /* dropdown panel */
   .dropdown{
     position:absolute; top:48px; right:0;
     background:#EFEFEF; border-radius:18px; overflow:hidden;
@@ -219,11 +215,7 @@
     border:1px solid rgba(0,0,0,.06);
   }
   .dropdown-title{ font-weight:700; padding:12px 14px; }
-
-  .menu-link{
-    display:flex; align-items:center; gap:.6rem;
-    padding:10px 14px; font-weight:600;
-  }
+  .menu-link{ display:flex; align-items:center; gap:.6rem; padding:10px 14px; font-weight:600; }
   .menu-link:hover{ background:rgba(0,0,0,.06); }
   .menu-ico{ width:18px; height:18px; color:#333; }
 
@@ -231,41 +223,49 @@
   @media (max-width:1024px){
     html, body { overflow:auto; }
     .admin-frame{ position: static; display:block; height:auto; }
-    .content{ grid-template-rows: auto auto auto; height:auto; overflow:visible; padding:16px; }
+    .content{ grid-template-rows: auto auto auto; height:auto; overflow:visible; padding:px; }
     .side{ width:auto; height:auto; border-radius:24px; box-shadow: 0 22px 40px rgba(0,0,0,.35); }
     .side::after{ display:none; }
     .topbar{ position: static; margin-left: auto; }
   }
 
-
-    /* ===== Toolbar: Search + Tambah ===== */
+  /* ===== Toolbar ===== */
   .toolbar{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; }
 
-  /* Search */
-  .search{ display:block; }
-  .search-wrap{
-    position: relative;
-    width: 280px; /* atur sesuai mau */
+  /* ==== Search Expandable ==== */
+  .search-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #E7E7E7;
+    border-radius: 9999px;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,.65),
+                inset 0 -6px 10px rgba(0,0,0,.12);
+    transition: width .25s ease;
+    width: 44px;
+    height: 44px;
+    overflow: hidden;
   }
-  .search-ico{
-    position:absolute; left:12px; top:50%;
-    transform: translateY(-50%);
-    width:18px; height:18px; opacity:.7;
-    pointer-events:none;
+  .search-wrap.open {
+    width: 260px;
+    padding-left:6px;
+    padding-right:6px;
   }
-  .search-input{
-    width:100%;
-    border-radius:14px;
-    background:#E7E7E7;
-    padding:10px 12px 10px 40px; /* space utk ikon */
-    box-shadow:
-      inset 0 2px 0 rgba(255,255,255,.65),
-      inset 0 -6px 10px rgba(0,0,0,.12);
-    outline: none;
+  .search-btn {
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px; border:0; background:transparent; cursor:pointer;
   }
-  .search-input::placeholder{ color:#6b7280; }
+  .search-ico { width:18px; height:18px; opacity:.7; }
+  .search-input {
+    flex:1; background:transparent; border:0;
+    padding:0 8px; outline:none; font-size:14px;
+  }
+  .search-close {
+    width:40px; height:40px; border:0;
+    background:transparent; font-size:20px; cursor:pointer;
+  }
 
-  /* Tombol Tambah (neo soft) */
+  /* Tombol soft */
   .btn-soft{
     display:inline-flex; align-items:center; gap:.5rem;
     padding:10px 14px; border-radius:9999px;
@@ -278,7 +278,6 @@
   .btn-soft:hover{ filter:brightness(.98); }
   .btn-ico{ width:18px; height:18px; }
 
-  /* Header tabel bulat (pill) */
   .th-pill{
     display:grid; place-items:center;
     height:48px; color:#fff; font-weight:700;
@@ -287,10 +286,7 @@
       inset 0 8px 12px rgba(255,255,255,.08),
       inset 0 -10px 18px rgba(0,0,0,.45);
   }
-
-  /* Link aksi Edit / Hapus */
   .action-link{ font-weight:700; }
-  .action-link--edit{ color:#16a34a; }   /* hijau */
-  .action-link--delete{ color:#ef4444; } /* merah */
-
+  .action-link--edit{ color:#16a34a; }
+  .action-link--delete{ color:#ef4444; }
 }
