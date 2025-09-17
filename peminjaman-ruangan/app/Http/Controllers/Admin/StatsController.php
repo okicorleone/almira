@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Room;
+use App\Models\Ruangan;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -17,8 +18,7 @@ class StatsController extends Controller
         $month = $request->query('month');  // 1..12
         $year  = $request->query('year');   // YYYY
 
-        $q = Booking::query()->select('room_id', DB::raw('COUNT(*) as total'))
-                ->with('room');
+
 
         // filter tanggal spesifik
         if ($date) {
@@ -31,20 +31,24 @@ class StatsController extends Controller
             $q->whereYear('tanggal', $year);
         }
 
-        $rows = $q->groupBy('room_id')
-                  ->orderBy('room_id')
-                  ->get();
-
+        $rooms = Room::all();
+        $room = $request->input('room');
         // siapkan labels & data untuk chart
-        if ($rows->isNotEmpty()) {
-            $labels = $rows->map(fn($r) => optional($r->room)->nama ?? "Room #{$r->room_id}")->values();
-            $data   = $rows->map(fn($r) => (int)$r->total)->values();
-        } else {
+        $query = Booking::query()
+            ->select('room_id', DB::raw('COUNT(*) as total'))
+            ->when($year, fn($q) => $q->whereYear('tanggal', $year))
+            ->when($month, fn($q) => $q->whereMonth('tanggal', $month))
+            ->when($room, fn($q) => $q->where('room_id', $room))
+            ->groupBy('room_id')
+            ->with('room')
+            ->orderBy('room_id');
+        
+        $result = $query->get();
             // fallback contoh ketika belum ada data
-            $labels = ['Ruangan 1','Ruangan 2','Ruangan 3','Ruangan 4','Ruangan 5','Ruangan 6'];
-            $data   = [4,24,29,22,13,50];
-        }
+            $labels = $rooms->map(fn($row) => $row->rooms->nama ?? 'Unknown');
+            $data   = $result->pluck('total');
+        
 
-        return view('admin.stats', compact('labels', 'data'));
+        return view('admin.stats', compact('labels', 'data', 'query', 'month', 'year', 'room','rooms'));
     }
 }
