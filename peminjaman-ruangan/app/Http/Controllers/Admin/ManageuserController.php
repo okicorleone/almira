@@ -12,74 +12,53 @@ class ManageUserController extends Controller
     /**
      * Tampilkan daftar user
      */
-    public function index(Request $request)
+    public function index()
     {
-        $q = $request->get('q');
-
-        $users = User::when($q, function ($query, $q) {
-            return $query->where('name', 'like', "%$q%")
-                         ->orWhere('email', 'like', "%$q%");
-        })->get();
-
+        $users = User::all();
         return view('admin.manageuser', compact('users'));
     }
 
-    /**
-     * Simpan user baru
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-            'role'     => 'required|in:admin,user',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|unique:users,email',
+            'password' => 'required|min:6',
+            'role' => 'nullable|string|max:255',
         ]);
 
         User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
             'password' => Hash::make($request->password),
-            'role'     => $request->role,
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan');
+        return redirect()->route('admin.manageuser.index')->with('success', 'Pengguna berhasil ditambahkan.');
     }
 
     /**
-     * Update user
+     * Tampilkan form edit user
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $manageuser)
     {
         $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'role'  => 'required|in:admin,user',
-            'password' => 'nullable|min:6|confirmed',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|unique:users,email,' . $manageuser->id,
+            'role' => 'nullable|string|unique:users,role,' . $manageuser->id,
         ]);
 
-        $data = $request->only(['name', 'email', 'role']);
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
+        $manageuser->update($request->only('name', 'email', 'role'));
 
-        $user->update($data);
-
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui');
+        return redirect()->route('admin.manageuser.index')->with('success', 'Pengguna berhasil diperbarui.');
     }
 
     /**
      * Hapus user
      */
-    public function destroy(User $user)
+    public function destroy(User $manageuser)
     {
-        // Jangan izinkan admin menghapus dirinya sendiri
-        if (auth()->id() === $user->id) {
-            return redirect()->route('admin.users.index')->with('error', 'Anda tidak bisa menghapus diri sendiri.');
-        }
-
-        $user->delete();
-
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus');
+        $manageuser->delete();
+        return redirect()->route('admin.manageuser.index')->with('success', 'Pengguna berhasil dihapus.');
     }
 }

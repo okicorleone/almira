@@ -3,8 +3,8 @@ export default () => ({
   showEdit: false,
   showDelete: false,
 
-  formAdd: { name: '', password: '', department: '', email: '' },
-  formEdit: { id: null, name: '', department: '', email: '' },
+  formAdd: { name: '', password: '', role: '', email: '' },
+  formEdit: { id: null, name: '', role: '', email: '' },
   del: { id: null, name: '' },
 
   openAdd() {
@@ -16,7 +16,7 @@ export default () => ({
     this.formEdit = {
       id: u.id,
       name: u.name ?? '',
-      department: u.department ?? '',
+      role: u.role ?? '',
       email: u.email ?? ''
     };
     this.showEdit = true;
@@ -37,8 +37,8 @@ export default () => ({
 
   reset() {
     this.showAdd = this.showEdit = this.showDelete = false;
-    this.formAdd  = { name: '', password: '', department: '', email: '' };
-    this.formEdit = { id: null, name: '', department: '', email: '' };
+    this.formAdd  = { name: '', password: '', role: '', email: '' };
+    this.formEdit = { id: null, name: '', role: '', email: '' };
     this.del      = { id: null, name: '' };
   }
 });
