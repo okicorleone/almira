@@ -197,6 +197,7 @@
   document.addEventListener("alpine:init", () => {
     Alpine.data("notifDropdown", () => ({
         openNotif: false,
+        openUser: false, 
         toggleNotif() {
             this.openNotif = !this.openNotif;
 

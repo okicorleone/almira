@@ -61,6 +61,7 @@ Route::middleware(['auth', 'isAdmin'])
 
         // Jadwal & Statistik
         Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
+        
         Route::get('stats',    [StatsController::class, 'index'])->name('stats');
 
         // Manage User (index/store/update/destroy)

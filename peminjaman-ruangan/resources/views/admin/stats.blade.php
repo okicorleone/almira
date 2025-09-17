@@ -53,7 +53,7 @@
 </div>
 @endsection
 
-@push('scripts')
+<!-- @push('scripts')
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
   @php
     // fallback data kalau controller tidak kirim
@@ -65,7 +65,6 @@
       const el = document.getElementById('statChart');
       if (!el) return;
       const ctx = el.getContext('2d');
-
       const grad = ctx.createLinearGradient(0, 0, 0, 250);
       grad.addColorStop(0, 'rgba(237, 28, 36, 0.35)');
       grad.addColorStop(1, 'rgba(237, 28, 36, 0)');
@@ -98,4 +97,46 @@
       });
     })();
   </script>
+@endpush -->
+@push('scripts')
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <script>
+    (function () {
+      const el = document.getElementById('statChart');
+      if (!el) return;
+      const ctx = el.getContext('2d');
+      const grad = ctx.createLinearGradient(0, 0, 0, 250);
+      grad.addColorStop(0, 'rgba(237, 28, 36, .35)');
+      grad.addColorStop(1, 'rgba(237, 28, 36, 0)');
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: @json($labels),   // Ambil label dari database,
+          datasets: [{
+            label: 'Pemakaian',
+            data: @json($data),
+            borderColor: '#8B5CF6',
+            backgroundColor: grad,
+            pointBorderColor: '#ED1C24',
+            pointBackgroundColor: '#ED1C24',
+            tension: .35,
+            pointRadius: 3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,       // ikut tinggi 320px wrapper
+          plugins: { legend: { display:false } },
+          scales: {
+            x: { grid: { color: 'rgba(0,0,0,.06)' } },
+            y: { suggestedMin: 0, suggestedMax: 40, grid: { color: 'rgba(0,0,0,.06)' } }
+          },
+          devicePixelRatio: 1,
+        }
+      });
+    })();
+  </script>
+  <script src="//unpkg.com/alpinejs" defer></script>
 @endpush
