@@ -104,7 +104,7 @@
     (function () {
       const el = document.getElementById('statChart');
       if (!el) return;
-      const ctx = el.getContext('2d');
+      const ctx = el.getContext('3d');
       const grad = ctx.createLinearGradient(0, 0, 0, 250);
       grad.addColorStop(0, 'rgba(237, 28, 36, .35)');
       grad.addColorStop(1, 'rgba(237, 28, 36, 0)');
@@ -121,17 +121,17 @@
             pointBorderColor: '#ED1C24',
             pointBackgroundColor: '#ED1C24',
             tension: .35,
-            pointRadius: 3,
+            pointRadius: 5,
             fill: true
           }]
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,       // ikut tinggi 320px wrapper
-          plugins: { legend: { display:false } },
+          // maintainAspectRatio: true,       // ikut tinggi 320px wrapper
+          plugins: { legend: { display:true } },
           scales: {
             x: { grid: { color: 'rgba(0,0,0,.06)' } },
-            y: { suggestedMin: 0, suggestedMax: 40, grid: { color: 'rgba(0,0,0,.06)' } }
+            y: { grid: { color: 'rgba(0,0,0,.06)' } }
           },
           devicePixelRatio: 1,
         }

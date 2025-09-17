@@ -31,21 +31,33 @@ class StatsController extends Controller
             $q->whereYear('tanggal', $year);
         }
 
-        $rooms = Room::all();
+        $rooms = Room::query()
+            ->orderBy('id', 'asc')
+            ->get();
+      
         $room = $request->input('room');
         // siapkan labels & data untuk chart
-        $query = Booking::query()
-            ->select('room_id', DB::raw('COUNT(*) as total'))
-            ->when($year, fn($q) => $q->whereYear('tanggal', $year))
-            ->when($month, fn($q) => $q->whereMonth('tanggal', $month))
-            ->when($room, fn($q) => $q->where('room_id', $room))
-            ->groupBy('room_id')
-            ->with('room')
-            ->orderBy('room_id');
+        $query = Room::query()
+            ->select('rooms.id as room_id', DB::raw('COUNT(bookings.id) as total'))
+            ->leftJoin('bookings', function ($join) use ($year, $month) {
+                $join->on('rooms.id', '=', 'bookings.room_id')
+                    ->where('bookings.status', 'approved');
+
+                if ($year) {
+                    $join->whereYear('bookings.tanggal', $year);
+                }
+
+                if ($month) {
+                    $join->whereMonth('bookings.tanggal', $month);
+                }
+            })
+            ->when($room, fn($q) => $q->where('rooms.id', $room))
+            ->groupBy('rooms.id')
+            ->orderBy('rooms.id');
         
         $result = $query->get();
             // fallback contoh ketika belum ada data
-            $labels = $rooms->map(fn($row) => $row->rooms->nama ?? 'Unknown');
+            $labels = $rooms->map(fn($row) => $row->nama ?? 'Unknown');
             $data   = $result->pluck('total');
         
 
