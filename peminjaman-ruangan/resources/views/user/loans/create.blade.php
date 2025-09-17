@@ -125,7 +125,6 @@
 
         {{-- Tombol --}}
         <div class="flex justify-end gap-3 pt-4">
-          <a href="{{ route('dashboard') }}" class="chip">Batal</a>
           <button type="submit" class="rounded-2xl bg-gray-700 text-white px-6 py-3 shadow-[0_6px_0_#4b5563]">Ajukan</button>
         </div>
       </form>
