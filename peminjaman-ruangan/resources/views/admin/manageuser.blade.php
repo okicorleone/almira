@@ -19,7 +19,6 @@
   <section class="neo-card p-0 overflow-hidden">
     <div class="table-wrap max-h-[500px] overflow-y-auto">
       <table class="neo-table w-full">
-        <thead class="sticky top-0 z-10 bg-gray-100">
           <tr>
             <th class="py-3 px-6 text-left">
               <div class="th-pill">Nama Lengkap</div>
