@@ -17,19 +17,24 @@
 
   <!-- Tabel daftar pengguna -->
   <section class="neo-card p-0 overflow-hidden">
-    <div class="px-8 pt-6 pb-3">
-      <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-4"><div class="th-pill">Nama Lengkap</div></div>
-        <div class="col-span-3"><div class="th-pill">Departemen</div></div>
-        <div class="col-span-3"><div class="th-pill">Alamat Email</div></div>
-        <div class="col-span-2"><div class="th-pill">Aksi</div></div>
-      </div>
-    </div>
-
-    <div class="divider mx-4"></div>
-
-    <div class="table-wrap">
-      <table class="neo-table">
+    <div class="table-wrap max-h-[500px] overflow-y-auto">
+      <table class="neo-table w-full">
+        <thead class="sticky top-0 z-10 bg-gray-100">
+          <tr>
+            <th class="py-3 px-6 text-left">
+              <div class="th-pill">Nama Lengkap</div>
+            </th>
+            <th class="py-3 px-6 text-left">
+              <div class="th-pill">Departemen</div>
+            </th>
+            <th class="py-3 px-6 text-left">
+              <div class="th-pill">Alamat Email</div>
+            </th>
+            <th class="py-3 px-6 text-left">
+              <div class="th-pill">Aksi</div>
+            </th>
+          </tr>
+        </thead>
         <tbody>
           @forelse($users as $u)
             <tr>
