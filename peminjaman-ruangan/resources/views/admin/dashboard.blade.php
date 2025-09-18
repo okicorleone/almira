@@ -58,9 +58,7 @@
                   </option>
                 @endfor
               </select>
-            </form>
-
-            <form method="GET" action="{{ route('admin.dashboard') }}" class="inline">
+  
               <select name="year" onchange="this.form.submit()" class="chip">
                 <option value="">Filter Tahun</option>
                 @for ($y = now()->year; $y >= 2020; $y--)
@@ -71,7 +69,7 @@
               </select>
             </form>
 
-            <form method="GET" action="{{ route('admin.dashboard') }}" class="inline">
+            <!-- <form method="GET" action="{{ route('admin.dashboard') }}" class="inline">
               <select name="room" onchange="this.form.submit()" class="chip">
                 <option value="">Filter Ruangan</option>
                 @foreach ($rooms as $room)
@@ -80,7 +78,7 @@
                   </option>
                 @endforeach
               </select>
-            </form>
+            </form> -->
           </div>
         </div>
         <div class="mt-2 h-[200px]">

@@ -179,13 +179,32 @@
               list.innerHTML = `<li class="px-4 py-3 text-sm opacity-70">Tidak ada notifikasi</li>`;
           }
 
+        // === Tambahan: update status .ping ===
+        updatePing(data.unreadCount ?? 0);
+
       } catch (err) {
           console.error("Gagal fetch notifikasi", err);
       }
   }
 
+  function updatePing(unreadCount) {
+    let bellBtn = document.querySelector(".icon-btn");
+    let ping = bellBtn.querySelector(".ping");
+
+    if (unreadCount > 0) {
+        if (!ping) {
+            let span = document.createElement("span");
+            span.classList.add("ping");
+            span.setAttribute("aria-hidden", "true");
+            bellBtn.appendChild(span);
+        }
+    } else {
+        if (ping) ping.remove();
+    }
+}
+
   fetchNotifications();
-  setInterval(fetchNotifications, 30000); // refresh tiap 30 detik
+  setInterval(fetchNotifications, 10000); // refresh tiap 30 detik
   </script>
 
   

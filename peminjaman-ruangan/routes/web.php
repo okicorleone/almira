@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoomController;
-use App\Http\Controllers\Admin\LoanController ;
+use App\Http\Controllers\Admin\LoanController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\ManageUserController;
@@ -53,34 +53,27 @@ Route::middleware(['auth', 'isAdmin'])
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-        // Manajemen Ruangan (CRUD) - alternatif Route::resource
+        // Manajemen Ruangan (CRUD)
         Route::resource('rooms', RoomController::class);
 
         // Loans (moderasi admin)
-        Route::resource('loans', App\Http\Controllers\Admin\LoanController::class);
+        Route::resource('loans', LoanController::class);
         Route::put('loans/{loan}/approve', [LoanController::class, 'approve'])->name('loans.approve');
         Route::put('loans/{loan}/reject',  [LoanController::class, 'reject'])->name('loans.reject');
 
         // Jadwal & Statistik
+        Route::resource('schedule', ScheduleController::class);
         Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
-        
         Route::get('stats',    [StatsController::class, 'index'])->name('stats');
 
-        // Manage User (index/store/update/destroy)
-        Route::resource('manageuser',ManageUserController::class);
+        // Manage User
+        Route::resource('manageuser', ManageUserController::class);
     
-
-        // Notifications (AJAX polling)
-        Route::get('/notifications/latest', [DashboardController::class, 'latestNotifications'])
+        // ================== Notifications (AJAX polling) ==================
+        Route::get('/notifications/latest', [NotificationController::class, 'latest'])
             ->name('notifications.latest');
 
-        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-
-                // Tandai 1 notifikasi terbaca
-        Route::put('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
-            ->name('notifications.read');
-
-        // Tandai semua notifikasi terbaca
+        // Tandai semua notif terbaca
         Route::put('/notifications/read', [NotificationController::class, 'markAllRead'])
             ->name('notifications.readAll');
     });

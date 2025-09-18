@@ -18,32 +18,17 @@
         <select name="room" onchange="this.form.submit()" class="chip">
           <option value="">Filter Ruangan</option>
           @foreach ($rooms ?? [] as $room)
-            @php $rid = is_array($room)?$room['id']:$room->id; @endphp
-            <option value="{{ $rid }}" {{ (string)request('room')===(string)$rid?'selected':'' }}>
-              {{ is_array($room)?$room['nama']:$room->nama }}
+            <option value="{{ $room->id }}" {{ request('room')==$room->id?'selected':'' }}>
+              {{ $room->nama }}
             </option>
           @endforeach
         </select>
-      </form>
-
-      {{-- Filter Bulan --}}
-      <form method="GET" action="{{ url('/admin/loans') }}" class="inline">
         <select name="month" onchange="this.form.submit()" class="chip">
           <option value="">Filter Bulan</option>
           @for ($m=1; $m<=12; $m++)
             <option value="{{ $m }}" {{ request('month')==$m?'selected':'' }}>
               {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
             </option>
-          @endfor
-        </select>
-      </form>
-
-      {{-- Filter Tahun --}}
-      <form method="GET" action="{{ url('/admin/loans') }}" class="inline">
-        <select name="year" onchange="this.form.submit()" class="chip">
-          <option value="">Filter Tahun</option>
-          @for ($y=now()->year; $y>=now()->year-5; $y--)
-            <option value="{{ $y }}" {{ request('year')==$y?'selected':'' }}>{{ $y }}</option>
           @endfor
         </select>
       </form>

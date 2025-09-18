@@ -9,7 +9,7 @@
   {{-- Toolbar: search kiri, filter kanan --}}
   <div class="toolbar mt-6 mb-4 flex items-center justify-between gap-3">
     {{-- Pakai komponen search --}}
-    <x-search route="{{ url('/admin/schedule') }}" />
+    <x-search :route="route('admin.schedule')" name="search" :value="request('search')" />
 
     <div class="flex items-center gap-3">
       {{-- Filter Ruangan --}}
@@ -74,7 +74,7 @@
                 <td class="py-4 px-6">{{ $S->user->name ?? '-' }}</td>
                 <td class="py-4 px-6">{{ $S->agenda ?? '-' }}</td>
                 <td class="py-4 px-6 text-center">{{ $S->jumlah_peserta ?? '-' }}</td>
-                <td class="py-4 px-6">{{ $S->jam_mulai ? \Carbon\Carbon::parse($S->jam_mulai)->format('H:i') : '-' }}</td>
+                <td class="py-4 px-6">{{ $S->jam ? \Carbon\Carbon::parse($S->jam)->format('H:i') : '-' }}</td>
                 <td class="py-4 px-6">{{ $S->jam_selesai ? \Carbon\Carbon::parse($S->jam_selesai)->format('H:i') : '-' }}</td>
                 <td class="py-4 px-6">{{ $S->list_kebutuhan ?? '-' }}</td>
                 <td class="py-4 px-6">
