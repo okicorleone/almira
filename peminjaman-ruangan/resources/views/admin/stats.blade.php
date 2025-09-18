@@ -7,12 +7,13 @@
   <h1 class="page-pill">Statistik Pemakaian</h1>
 
   {{-- Toolbar: filter --}}
-  <div class="toolbar mt-6 mb-4 flex items-center gap-3">
-    <span class="font-semibold mr-2">Sort By :</span>
+<div class="toolbar mt-10 mb-5 flex items-center gap-2 flex-wrap">
+  <span class="font-semibold mr-2">Sort By :</span>
 
+  <div class="flex gap-2">
     {{-- Filter Tanggal --}}
-    <form method="GET" action="{{ url('/admin/stats') }}" class="inline">
-      <select name="day" onchange="this.form.submit()" class="chip">
+    <form method="GET" action="{{ url('/admin/stats') }}">
+      <select name="day" onchange="this.form.submit()" class="chip min-w-[120px]">
         <option value="">Filter Tanggal</option>
         @for ($d=1; $d<=31; $d++)
           <option value="{{ $d }}" {{ request('day')==$d?'selected':'' }}>{{ $d }}</option>
@@ -21,8 +22,8 @@
     </form>
 
     {{-- Filter Bulan --}}
-    <form method="GET" action="{{ url('/admin/stats') }}" class="inline">
-      <select name="month" onchange="this.form.submit()" class="chip">
+    <form method="GET" action="{{ url('/admin/stats') }}">
+      <select name="month" onchange="this.form.submit()" class="chip min-w-[120px]">
         <option value="">Filter Bulan</option>
         @for ($m=1; $m<=12; $m++)
           <option value="{{ $m }}" {{ request('month')==$m?'selected':'' }}>
@@ -33,8 +34,8 @@
     </form>
 
     {{-- Filter Tahun --}}
-    <form method="GET" action="{{ url('/admin/stats') }}" class="inline">
-      <select name="year" onchange="this.form.submit()" class="chip">
+    <form method="GET" action="{{ url('/admin/stats') }}">
+      <select name="year" onchange="this.form.submit()" class="chip min-w-[120px]">
         <option value="">Filter Tahun</option>
         @for ($y = now()->year; $y >= now()->year-5; $y--)
           <option value="{{ $y }}" {{ request('year')==$y?'selected':'' }}>{{ $y }}</option>
@@ -42,6 +43,8 @@
       </select>
     </form>
   </div>
+</div>
+
 
   {{-- Chart --}}
   <section class="neo-card col-stretch" aria-labelledby="statistik-title">
