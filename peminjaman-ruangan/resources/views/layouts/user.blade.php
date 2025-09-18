@@ -11,7 +11,6 @@
   <link rel="preconnect" href="https://fonts.bunny.net">
   <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet">
 
-  {{-- PENTING: hanya user.css, jangan admin.css --}}
   @vite([
     'resources/css/app.css',
     'resources/css/user.css',
@@ -102,5 +101,28 @@
   </div>
 
   @stack('scripts')
+
+  {{-- Script untuk toggle sidebar --}}
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("btnSideToggle");
+    const side = document.querySelector(".side");
+
+    // cek state dari localStorage
+    if (localStorage.getItem("userSidebar") === "collapsed") {
+      side.classList.add("side--collapsed");
+    }
+
+    btn.addEventListener("click", () => {
+      side.classList.toggle("side--collapsed");
+
+      if (side.classList.contains("side--collapsed")) {
+        localStorage.setItem("userSidebar", "collapsed");
+      } else {
+        localStorage.setItem("userSidebar", "expanded");
+      }
+    });
+  });
+  </script>
 </body>
 </html>

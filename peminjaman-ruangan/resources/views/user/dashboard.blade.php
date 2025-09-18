@@ -94,23 +94,26 @@
     </div>    
 
     {{-- List Jadwal --}}
-    <div x-show="view==='list'" x-transition class="neo-card">
-      <h2 class="card-title mb-3">Jadwal Bulan Ini</h2>
+<div x-show="view==='list'" x-transition class="neo-card">
+  <h2 class="card-title mb-3">Jadwal Bulan Ini</h2>
 
-      @if($loans->count() > 0)
-        <ul class="divide-y divide-black/10">
-          @foreach($loans as $loan)
-            <li class="px-4 py-3 text-sm">
-              <div class="font-semibold">{{ $loan->agenda }}</div>
-              <div class="opacity-80">{{ $loan->room->name }} — {{ $loan->date }}</div>
-              <div class="text-xs opacity-70 mt-1">oleh {{ $loan->user->name ?? 'User' }}</div>
-            </li>
-          @endforeach
-        </ul>
-      @else
-        <div class="text-center text-gray-600 py-8">Belum ada jadwal.</div>
-      @endif
+  @if($loans->count() > 0)
+    <div class="max-h-[400px] overflow-y-auto">
+      <ul class="divide-y divide-black/10">
+        @foreach($loans as $loan)
+          <li class="px-4 py-3 text-sm">
+            <div class="font-semibold">{{ $loan->agenda }}</div>
+            <div class="opacity-80">{{ $loan->room->name }} — {{ $loan->date }}</div>
+            <div class="text-xs opacity-70 mt-1">oleh {{ $loan->user->name ?? 'User' }}</div>
+          </li>
+        @endforeach
+      </ul>
     </div>
+  @else
+    <div class="text-center text-gray-600 py-8">Belum ada jadwal.</div>
+  @endif
+</div>
+
   </section>
 </div>
 @endsection
