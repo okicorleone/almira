@@ -11,8 +11,10 @@ use App\Http\Controllers\Admin\LoanController ;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\ManageUserController;
-use App\Http\Controllers\User\LoanController as UserLoanController;
 use App\Http\Controllers\Admin\NotificationController;
+//user
+use App\Http\Controllers\User\LoanController as UserLoanController;
+use App\Http\Controllers\User\UserDashboardController as UserDashboardController;
 
 // ================== Redirect root & /admin ==================
 Route::get('/admin', fn () => redirect()->route('admin.dashboard'));
@@ -29,7 +31,7 @@ Route::get('/', function () {
 // ================== USER ROUTES ==================
 Route::middleware(['auth'])->group(function () {
     // Dashboard user
-    Route::get('/dashboard', fn () => view('user.dashboard'))->name('dashboard');
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 
     // Profile
     Route::get('/profile',  [ProfileController::class, 'edit'])->name('profile.edit');
