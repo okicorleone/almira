@@ -4,9 +4,9 @@
 @section('content')
   <h1 class="page-pill">Pengajuan Pinjaman</h1>
 
-  {{-- Wrapper konten pakai board supaya scrollable & center --}}
+  {{-- Wrapper konten pakai board supaya scrollable & full --}}
   <div class="board">
-    <section class="neo-card w-full max-w-xl">
+    <section class="neo-card w-full">
       {{-- Pesan sukses --}}
       @if(session('ok'))
         <div class="chip mb-3">{{ session('ok') }}</div>
@@ -116,7 +116,7 @@
             name="list_kebutuhan" 
             rows="3" 
             class="w-full rounded-2xl bg-neutral-300/80 px-4 py-3" 
-            placeholder="Tulis list_kebutuhan ruangan..."
+            placeholder="Tulis list kebutuhan ruangan..."
           >{{ old('list_kebutuhan') }}</textarea>
           @error('list_kebutuhan')
             <div class="text-red-600 text-sm">{{ $message }}</div>
@@ -125,7 +125,9 @@
 
         {{-- Tombol --}}
         <div class="flex justify-end gap-3 pt-4">
-          <button type="submit" class="rounded-2xl bg-gray-700 text-white px-6 py-3 shadow-[0_6px_0_#4b5563]">Ajukan</button>
+          <button type="submit" class="rounded-2xl bg-gray-700 text-white px-6 py-3 shadow-[0_6px_0_#4b5563]">
+            Ajukan
+          </button>
         </div>
       </form>
     </section>

@@ -123,7 +123,7 @@
   }
 
   .board { min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
-  .board::-webkit-scrollbar { width: 10px; }
+  .board::-webkit-scrollbar { width: 100%; }
   .board::-webkit-scrollbar-thumb { background: rgba(0,0,0,.22); border-radius: 8px; }
 
   /* Topbar */
