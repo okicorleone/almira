@@ -87,12 +87,19 @@
         </span>
       </div>
 
-      <!-- Departemen -->
+      <!-- Role -->
       <div class="relative">
-        <input x-model="formAdd.role" name="role" placeholder="Departemen"
-               class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-gray-400">
+        <select x-model="formAdd.role" name="role" placeholder="Departemen"
+              class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af]
+                 px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-gray-400"required>
+            <option value="" disabled selected>Pilih Layanan</option>
+          @foreach($roles as $role)
+            <option value="{{ $role }}">{{ $role }}</option>
+          @endforeach
+        </select>
         <span class="absolute right-4 top-1/2 -translate-y-1/2 opacity-70">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h18v4H3Zm0 6h18v12H3Zm2 2v8h14v-8Z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3h18v4H3Zm0 6h18v12H3Zm2 2v8h14v-8Z"/></svg>
         </span>
       </div>
 
@@ -128,10 +135,18 @@
       </div>
 
       <div class="relative">
-        <input x-model="formEdit.role" name="role" placeholder="Departemen"
-               class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af] px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-gray-400">
+        <select x-model="formEdit.role" name="role"
+          class="w-full rounded-2xl bg-neutral-300/80 shadow-[0_6px_0_#9ca3af]
+                 px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-gray-400"required>
+          <option value="" disabled selected>Pilih Layanan</option>
+          @foreach($roles as $role)
+            <option value="{{ $role }}">{{ $role }}</option>
+          @endforeach
+        </select>
         <span class="absolute right-4 top-1/2 -translate-y-1/2 opacity-70">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h18v4H3Zm0 6h18v12H3Zm2 2v8h14v-8Z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3h18v4H3Zm0 6h18v12H3Zm2 2v8h14v-8Z"/>
+          </svg>
         </span>
       </div>
 

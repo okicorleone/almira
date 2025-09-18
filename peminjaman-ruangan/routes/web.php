@@ -67,7 +67,7 @@ Route::middleware(['auth', 'isAdmin'])
         Route::get('stats',    [StatsController::class, 'index'])->name('stats');
 
         // Manage User (index/store/update/destroy)
-        Route::resource('manageuser', App\Http\Controllers\Admin\ManageUserController::class);
+        Route::resource('manageuser',ManageUserController::class);
     
 
         // Notifications (AJAX polling)

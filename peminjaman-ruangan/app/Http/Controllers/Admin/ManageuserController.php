@@ -12,13 +12,15 @@ class ManageUserController extends Controller
     /**
      * Tampilkan daftar user
      */
+    
     public function index()
     {
         $users = User::all();
-        return view('admin.manageuser', compact('users'));
+        $roles = User::select('role')->distinct()->pluck('role'); 
+        return view('admin.manageuser', compact('users', 'roles'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request,User $manageuser)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -30,8 +32,8 @@ class ManageUserController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'role' => $request->role,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
         return redirect()->route('admin.manageuser.index')->with('success', 'Pengguna berhasil ditambahkan.');
@@ -44,8 +46,8 @@ class ManageUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'role'  => 'nullable|string|max:255' . $manageuser->id,
             'email' => 'nullable|email|unique:users,email,' . $manageuser->id,
-            'role' => 'nullable|string|unique:users,role,' . $manageuser->id,
         ]);
 
         $manageuser->update($request->only('name', 'email', 'role'));
