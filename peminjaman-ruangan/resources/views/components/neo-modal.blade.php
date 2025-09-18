@@ -14,7 +14,9 @@
 <div x-show="{{ $show }}" x-cloak
      class="fixed inset-0 z-[70] grid place-items-center p-4"
      x-transition>
-  <div class="w-[{{ $width }}] rounded-[28px] bg-white p-6 md:p-8 shadow-2xl">
+  <div class="rounded-[28px] bg-white p-6 md:p-8 shadow-2xl"
+     style="max-width: {{ $width }}; width: 100%;">
+
     @if($title)
       <h2 class="text-3xl font-extrabold text-center mb-6">{!! $title !!}</h2>
     @endif

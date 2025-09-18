@@ -74,37 +74,38 @@
     </div>
   </section>
 
-  {{-- ==== MODAL TAMBAH ==== --}}
-  <x-neo-modal show="showAdd" title="Tambahkan<br>Ruangan">
-    <form method="POST" action="{{ route('admin.rooms.store') }}" class="space-y-6">
-      @csrf
-      <div>
-        <label class="block font-semibold text-xl mb-2">Nama Ruangan</label>
-        <input x-model="formAdd.nama" name="nama" required
-               class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
-      </div>
-      <div>
-        <label class="block font-semibold text-xl mb-2">Lantai</label>
-        <input x-model="formAdd.lantai" name="lantai" required
-               class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
-      </div>
-      <div>
-        <label class="block font-semibold text-xl mb-2">Deskripsi Ruangan</label>
-        <textarea x-model="formAdd.deskripsi" name="deskripsi" rows="4"
-                  class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400"></textarea>
-      </div>
+ {{-- ==== MODAL TAMBAH ==== --}}
+<x-neo-modal show="showAdd" title="Tambahkan Ruangan" :width="'min(800px,95vw)'">
+  <form method="POST" action="{{ route('admin.rooms.store') }}" class="space-y-6">
+    @csrf
+    <div>
+      <label class="block font-semibold text-xl mb-2">Nama Ruangan</label>
+      <input x-model="formAdd.nama" name="nama" required
+             class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
+    </div>
+    <div>
+      <label class="block font-semibold text-xl mb-2">Lantai</label>
+      <input x-model="formAdd.lantai" name="lantai" required
+             class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400">
+    </div>
+    <div>
+      <label class="block font-semibold text-xl mb-2">Deskripsi Ruangan</label>
+      <textarea x-model="formAdd.deskripsi" name="deskripsi" rows="4"
+                class="w-full rounded-2xl bg-neutral-300/80 shadow px-4 py-3 outline-none focus:ring-2 focus:ring-gray-400"></textarea>
+    </div>
 
-      <div class="flex justify-center gap-4">
-        <button type="button" @click="reset()"
-                class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow">Batal</button>
-        <button type="submit"
-                class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow">OK</button>
-      </div>
-    </form>
-  </x-neo-modal>
+    <div class="flex justify-center gap-4">
+      <button type="button" @click="reset()"
+              class="rounded-2xl bg-gray-500 text-white px-8 py-3 text-xl shadow">Batal</button>
+      <button type="submit"
+              class="rounded-2xl bg-gray-700 text-white px-8 py-3 text-xl shadow">OK</button>
+    </div>
+  </form>
+</x-neo-modal>
+
 
   {{-- ==== MODAL EDIT ==== --}}
-  <x-neo-modal show="showEdit" title="Edit Ruangan">
+  <x-neo-modal show="showEdit" title="Edit Ruangan"  >
     <form method="POST" :action="editAction()" class="space-y-6" id="formEdit">
       @csrf
       @method('PUT')
