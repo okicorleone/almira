@@ -62,7 +62,7 @@ Route::middleware(['auth', 'isAdmin'])
         Route::put('loans/{loan}/reject',  [LoanController::class, 'reject'])->name('loans.reject');
 
         // Jadwal & Statistik
-        Route::resource('schedule', ScheduleController::class);
+        // Route::resource('schedule', ScheduleController::class);
         Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
         Route::get('stats',    [StatsController::class, 'index'])->name('stats');
 
@@ -76,6 +76,10 @@ Route::middleware(['auth', 'isAdmin'])
         // Tandai semua notif terbaca
         Route::put('/notifications/read', [NotificationController::class, 'markAllRead'])
             ->name('notifications.readAll');
+
+        Route::get('/schedule/export-csv', [App\Http\Controllers\Admin\ScheduleController::class, 'exportCsv'])
+        ->name('schedule.exportCsv');
+
     });
 
 // ================== AUTH ROUTES ==================

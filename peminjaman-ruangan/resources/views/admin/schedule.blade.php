@@ -97,14 +97,15 @@
     </div>
   </section>
   
-    {{-- Tombol Export Excel (sementara dummy) --}}
-  <div class="mt-6 flex justify-center">
-    <a href="#"
-       class="rounded-2xl bg-emerald-600 text-white px-8 py-3 text-xl
-              shadow-[0_6px_0_#059669] hover:bg-emerald-700 transition">
-      Export ke Excel
-    </a>
-  </div>
+<div class="mt-6 flex justify-center">
+<a href="{{ route('admin.schedule.exportCsv', request()->all()) }}"
+   class="rounded-2xl bg-emerald-600 text-white px-8 py-3 text-xl
+          shadow-[0_6px_0_#059669] hover:bg-emerald-700 transition">
+  Export ke Excel
+</a>
+</div>
+
+
 
 </div>
 @endsection
