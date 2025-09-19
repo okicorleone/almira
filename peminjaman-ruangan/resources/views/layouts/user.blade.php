@@ -75,11 +75,12 @@
               <div class="font-semibold">{{ Auth::user()->name ?? 'User' }}</div>
               <div class="text-xs opacity-70">Pengguna</div>
             </div>
-            <nav class="py-2">
-              <a href="{{ route('profile.edit') }}" class="menu-link">
-                <svg class="menu-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5 0-8 2.5-8 5v1h16v-1c0-2.5-3-5-8-5Z"/></svg>
-                Profil
-              </a>
+                <a href="{{ route('user.password.change') }}" class="menu-link">
+                    <svg class="menu-ico" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5 0-8 2.5-8 5v1h16v-1c0-2.5-3-5-8-5Z"/>
+                    </svg>
+                    Profile
+                </a>
               <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="menu-link w-full text-left">
