@@ -14,7 +14,7 @@ class StatsController extends Controller
 {
     public function index(Request $request)
     {
-        $day  = $request->query('DD');   // YYYY-MM-DD (opsional)
+        $day  = $request->query('day');   // YYYY-MM-DD (opsional)
         $month = $request->query('month');  // 1..12
         $year  = $request->query('year');   // YYYY
 
@@ -33,7 +33,7 @@ if ($request->filled('year')) {
 }
 
 $bookings = $query->get();
-
+        
 
         $rooms = Room::query()
             ->orderBy('id', 'asc')
@@ -43,7 +43,7 @@ $bookings = $query->get();
         // siapkan labels & data untuk chart
         $query = Room::query()
             ->select('rooms.id as room_id', DB::raw('COUNT(bookings.id) as total'))
-            ->leftJoin('bookings', function ($join) use ($year, $month) {
+            ->leftJoin('bookings', function ($join) use ($year, $month, $day) {
                 $join->on('rooms.id', '=', 'bookings.room_id')
                     ->where('bookings.status', 'approved');
 
@@ -53,6 +53,10 @@ $bookings = $query->get();
 
                 if ($month) {
                     $join->whereMonth('bookings.tanggal', $month);
+                }
+                
+                if ($day) {
+                    $join->whereDay('bookings.tanggal', $day);
                 }
             })
             ->when($room, fn($q) => $q->where('rooms.id', $room))
