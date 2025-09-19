@@ -115,15 +115,17 @@
               <div class="font-semibold">{{ Auth::user()->name ?? 'Admin' }}</div>
               <div class="text-xs opacity-70">{{ Auth::user()->role ?? 'Admin' }}</div>
             </div>
-            <nav class="py-2">
+            <!-- <nav class="py-2">
               <a href="{{ route('profile.edit') }}" class="menu-link">
                 <svg class="menu-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5 0-8 2.5-8 5v1h16v-1c0-2.5-3-5-8-5Z"/></svg>
                 Profil
-              </a>
-              <a href="#" class="menu-link">
-                <svg class="menu-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 8a4 4 0 1 1-4 4 4 4 0 0 1 4-4Zm8 4a8 8 0 1 1-8-8 8 8 0 0 1 8 8Z"/></svg>
-                Pengaturan
-              </a>
+              </a> -->
+          <a href="{{ route('password.request') }}" class="menu-link">
+              <svg class="menu-ico" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 8a4 4 0 1 1-4 4 4 4 0 0 1 4-4Zm8 4a8 8 0 1 1-8-8 8 8 0 0 1 8 8Z"/>
+              </svg>
+              Profil
+          </a>
               <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="menu-link w-full text-left">

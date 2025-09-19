@@ -62,7 +62,7 @@ Route::middleware(['auth', 'isAdmin'])
         Route::put('loans/{loan}/reject',  [LoanController::class, 'reject'])->name('loans.reject');
 
         // Jadwal & Statistik
-        // Route::resource('schedule', ScheduleController::class);
+        Route::resource('schedule', ScheduleController::class);
         Route::get('schedule', [ScheduleController::class, 'index'])->name('schedule');
         Route::get('stats',    [StatsController::class, 'index'])->name('stats');
 
