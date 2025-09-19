@@ -12,17 +12,16 @@
 
   <div class="flex gap-2">
     {{-- Filter Tanggal --}}
-    <form method="GET" action="{{ url('/admin/stats') }}">
+    <form method="GET" action="{{ url('/admin/stats') }}" class="flex gap-2">
+      {{-- Filter Tanggal --}}
       <select name="day" onchange="this.form.submit()" class="chip min-w-[120px]">
         <option value="">Filter Tanggal</option>
         @for ($d=1; $d<=31; $d++)
           <option value="{{ $d }}" {{ request('day')==$d?'selected':'' }}>{{ $d }}</option>
         @endfor
       </select>
-    </form>
 
-    {{-- Filter Bulan --}}
-    <form method="GET" action="{{ url('/admin/stats') }}">
+      {{-- Filter Bulan --}}
       <select name="month" onchange="this.form.submit()" class="chip min-w-[120px]">
         <option value="">Filter Bulan</option>
         @for ($m=1; $m<=12; $m++)
@@ -31,10 +30,8 @@
           </option>
         @endfor
       </select>
-    </form>
 
-    {{-- Filter Tahun --}}
-    <form method="GET" action="{{ url('/admin/stats') }}">
+      {{-- Filter Tahun --}}
       <select name="year" onchange="this.form.submit()" class="chip min-w-[120px]">
         <option value="">Filter Tahun</option>
         @for ($y = now()->year; $y >= now()->year-5; $y--)

@@ -14,22 +14,26 @@ class StatsController extends Controller
 {
     public function index(Request $request)
     {
-        $date  = $request->query('date');   // YYYY-MM-DD (opsional)
+        $day  = $request->query('DD');   // YYYY-MM-DD (opsional)
         $month = $request->query('month');  // 1..12
         $year  = $request->query('year');   // YYYY
 
+$query = Booking::query();
 
+if ($request->filled('day')) {
+    $query->whereDay('tanggal', $request->day);
+}
 
-        // filter tanggal spesifik
-        if ($date) {
-            $q->whereDate('tanggal', $date);
-        }
-        if ($month) {
-            $q->whereMonth('tanggal', $month);
-        }
-        if ($year) {
-            $q->whereYear('tanggal', $year);
-        }
+if ($request->filled('month')) {
+    $query->whereMonth('tanggal', $request->month);
+}
+
+if ($request->filled('year')) {
+    $query->whereYear('tanggal', $request->year);
+}
+
+$bookings = $query->get();
+
 
         $rooms = Room::query()
             ->orderBy('id', 'asc')
@@ -59,6 +63,8 @@ class StatsController extends Controller
             // fallback contoh ketika belum ada data
             $labels = $rooms->map(fn($row) => $row->nama ?? 'Unknown');
             $data   = $result->pluck('total');
+
+            
         
 
         return view('admin.stats', compact('labels', 'data', 'query', 'month', 'year', 'room','rooms'));

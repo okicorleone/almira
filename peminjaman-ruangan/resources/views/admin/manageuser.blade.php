@@ -94,7 +94,7 @@
                  px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-gray-400"required>
             <option value="" disabled selected>Pilih Layanan</option>
           @foreach($roles as $role)
-            <option value="{{ $role }}">{{ $role }}</option>
+            <option value="{{ $role }}">{{ ucfirst($role) }}</option>
           @endforeach
         </select>
         <span class="absolute right-4 top-1/2 -translate-y-1/2 opacity-70">

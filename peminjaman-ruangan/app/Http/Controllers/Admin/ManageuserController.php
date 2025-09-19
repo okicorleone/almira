@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\DB;
 class ManageUserController extends Controller
 {
     /**
@@ -15,9 +15,17 @@ class ManageUserController extends Controller
     
     public function index()
     {
-        $users = User::all();
-        $roles = User::select('role')->distinct()->pluck('role'); 
-        return view('admin.manageuser', compact('users', 'roles'));
+    $users = User::all();
+
+    // Ambil tipe kolom 'role' langsung pakai string, tanpa DB::raw()
+    $column = DB::select("SHOW COLUMNS FROM users WHERE Field = 'role'")[0]->Type;
+
+    // Ekstrak semua opsi ENUM
+    preg_match("/^enum\('(.*)'\)$/", $column, $matches);
+    $roles = explode("','", $matches[1]);
+
+    return view('admin.manageuser', compact('users', 'roles'));
+
     }
 
     public function store(Request $request,User $manageuser)
