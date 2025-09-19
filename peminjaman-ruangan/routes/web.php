@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 // ==== Controllers ====
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\LoanController;
@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\ManageUserController;
 use App\Http\Controllers\Admin\NotificationController;
+
 //user
 use App\Http\Controllers\User\LoanController as UserLoanController;
 use App\Http\Controllers\User\UserDashboardController as UserDashboardController;
@@ -49,6 +50,10 @@ Route::middleware(['auth', 'isAdmin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+
+
+        Route::get('/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('password.change');
+        Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('password.update');
 
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
