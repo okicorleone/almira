@@ -24,6 +24,7 @@ class LoanController extends Controller{
             'jam' => 'required',
             'jam_selesai' => 'required',
             'list_kebutuhan' => 'nullable|string',
+            'status' => 'in:pending,approved,rejected',
         ]);
 
         $loan= Loan::create([

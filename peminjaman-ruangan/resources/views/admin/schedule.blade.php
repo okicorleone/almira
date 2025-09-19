@@ -22,10 +22,9 @@
             </option>
           @endforeach
         </select>
-      </form>
 
       {{-- Filter Bulan --}}
-      <form method="GET" action="{{ url('/admin/schedule') }}" class="inline">
+
         <select name="month" onchange="this.form.submit()" class="chip">
           <option value="">Filter Bulan</option>
           @for ($m=1; $m<=12; $m++)
@@ -34,10 +33,8 @@
             </option>
           @endfor
         </select>
-      </form>
 
       {{-- Filter Tahun --}}
-      <form method="GET" action="{{ url('/admin/schedule') }}" class="inline">
         <select name="year" onchange="this.form.submit()" class="chip">
           <option value="">Filter Tahun</option>
           @for ($y = now()->year; $y >= now()->year-5; $y--)

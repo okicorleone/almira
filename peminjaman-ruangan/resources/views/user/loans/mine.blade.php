@@ -32,9 +32,9 @@
               <td>{{ $loan->jam_selesai ?? '-' }}</td>
               <td>{{ $loan->list_kebutuhan ?? '-' }}</td>
               <td>
-                @if($loan->status == 'disetujui')
+                @if($loan->status == 'approved')
                   <span class="status-pill status-yes">Disetujui</span>
-                @elseif($loan->status == 'ditolak')
+                @elseif($loan->status == 'rejected')
                   <span class="status-pill status-no">Ditolak</span>
                 @else
                   <span class="status-pill status-wait">Menunggu</span>
