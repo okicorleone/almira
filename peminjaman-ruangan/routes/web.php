@@ -59,8 +59,8 @@ Route::middleware(['auth', 'isAdmin'])
 
 
 
-        Route::get('/change-password', [AdminProfileController::class, 'showChangePasswordForm'])->name('password.change');
-        Route::put('/change-password', [AdminProfileController::class, 'changePassword'])->name('password.update');
+        Route::get('admin/change-password', [AdminProfileController::class, 'showChangePasswordForm'])->name('password.change');
+        Route::put('admin/change-password', [AdminProfileController::class, 'changePassword'])->name('password.update');
 
 
         // Dashboard

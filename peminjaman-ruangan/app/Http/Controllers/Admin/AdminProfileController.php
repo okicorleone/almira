@@ -11,7 +11,7 @@ class AdminProfileController extends Controller
     // Tampilkan form ubah password admin
     public function showChangePasswordForm()
     {
-        return view('auth.change-password'); // view khusus admin
+        return view('auth.admin.change-password'); // view khusus admin
     }
 
     // Proses ubah password admin
