@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Console\Scheduling;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,7 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'isAdmin' => \App\Http\Middleware\IsAdmin::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
-        ]);
+            'weekday' => \App\Http\Middleware\WeekdayAccess::class,
+        ]);    
+    })
+
+    ->withSchedule(function (Illuminate\Console\Scheduling\Schedule $schedule) {
+        // Jalankan command release ruangan tiap 5 menit
+        $schedule->command('rooms:release-booked')->everyFiveMinutes();
     })
 
     ->withExceptions(function (Exceptions $exceptions): void {

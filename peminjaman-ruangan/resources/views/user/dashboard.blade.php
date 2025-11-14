@@ -24,6 +24,7 @@
         <path d="M7 10l5 5 5-5z"/>
       </svg>
     </div>
+
     {{-- Filter Bulan --}}
     <div class="pill-select">
       <span>Filter Bulan</span>
@@ -69,23 +70,63 @@
         <div>Sabtu</div>
         <div>Minggu</div>
       </div>
+
       <div class="cal-grid">
         @php
-          // ambil tanggal awal bulan sesuai filter
           $firstDay = \Carbon\Carbon::create($year, $month, 1);
           $daysInMonth = $firstDay->daysInMonth;
         @endphp
-
         @for($i=1; $i <= $daysInMonth; $i++)
           @php
             $date = \Carbon\Carbon::create($year, $month, $i);
             $loanToday = $loans->where('tanggal', $date->toDateString());
           @endphp
-          <div class="cal-cell">
+
+          <div 
+            class="cal-cell relative group cursor-pointer hover:bg-green-50 transition"
+            x-data="{ show: false }" 
+            @mouseenter="show = true" 
+            @mouseleave="show = false"
+            @click="window.location.href='{{ route('loans.create') }}?tanggal={{ $date->toDateString() }}'"
+          >
+            {{-- Tanggal --}}
             <span class="cal-date">{{ $i }}</span>
+
+            {{-- Indikator ada kegiatan --}}
             @if($loanToday->count() > 0)
-              <div class="mt-1 text-xs text-red-600">
-                {{ $loanToday->count() }} Jadwal
+              <div class="mt-8 space-y-1">
+                @foreach($loanToday as $loan)
+                  <div class="text-xs bg-green-100 border border-green-300 rounded px-1 py-0.5 truncate">
+                    <div class="font-semibold text-green-800 truncate">
+                      {{ $loan->agenda }}
+                    </div>
+                  </div>
+                @endforeach
+              </div>
+
+              {{-- POPUP DETAIL --}}
+              <div 
+                x-show="show"
+                x-transition
+                x-cloak
+                class="absolute z-50 top-full left-1/2 -translate-x-1/2 mt-2 w-56 bg-white shadow-lg rounded-lg border border-gray-200 p-3 text-sm"
+              >
+                <div class="font-semibold text-green-700 mb-1">
+                  Jadwal {{ $date->translatedFormat('d F Y') }}
+                </div>
+                <ul class="divide-y divide-gray-200 max-h-40 overflow-y-auto">
+                  @foreach($loanToday as $loan)
+                    <li class="py-1">
+                      <div class="font-medium text-gray-800">
+                        {{ $loan->agenda }}
+                      </div>
+                      <div class="text-[11px] text-gray-600">
+                        {{ $loan->room->nama ?? '-' }}<br>
+                        {{ \Carbon\Carbon::parse($loan->jam)->format('H:i') }} - {{ \Carbon\Carbon::parse($loan->jam_selesai)->format('H:i') }}
+                      </div>
+                    </li>
+                  @endforeach
+                </ul>
               </div>
             @endif
           </div>
@@ -94,25 +135,32 @@
     </div>    
 
     {{-- List Jadwal --}}
-<div x-show="view==='list'" x-transition class="neo-card">
-  <h2 class="card-title mb-3">Jadwal Bulan Ini</h2>
+    <div x-show="view==='list'" x-transition class="neo-card">
+      <h2 class="card-title mb-3">Jadwal Bulan Ini (Disetujui)</h2>
 
-  @if($loans->count() > 0)
-    <div class="max-h-[400px] overflow-y-auto">
-      <ul class="divide-y divide-black/10">
-        @foreach($loans as $loan)
-          <li class="px-4 py-3 text-sm">
-            <div class="font-semibold">{{ $loan->agenda }}</div>
-            <div class="opacity-80">{{ $loan->room->name }} — {{ $loan->date }}</div>
-            <div class="text-xs opacity-70 mt-1">oleh {{ $loan->user->name ?? 'User' }}</div>
-          </li>
-        @endforeach
-      </ul>
+      @if($loans->count() > 0)
+        <div class="max-h-[400px] overflow-y-auto">
+          <ul class="divide-y divide-black/10">
+            @foreach($loans as $loan)
+              <li class="px-4 py-3 text-sm">
+                <div class="font-semibold">{{ $loan->agenda }}</div>
+                <div class="opacity-80">
+                  {{ $loan->room->nama ?? '-' }} — {{ \Carbon\Carbon::parse($loan->tanggal)->translatedFormat('d F Y') }}<br>
+                  {{ \Carbon\Carbon::parse($loan->jam)->format('H:i') }} - {{ \Carbon\Carbon::parse($loan->jam_selesai)->format('H:i') }}
+                </div>
+                <div class="text-xs opacity-70 mt-1">
+                  oleh {{ $loan->user->name ?? 'User' }}
+                </div>
+              </li>
+            @endforeach
+          </ul>
+        </div>
+      @else
+        <div class="text-center text-gray-600 py-8">
+          Belum ada jadwal disetujui bulan ini.
+        </div>
+      @endif
     </div>
-  @else
-    <div class="text-center text-gray-600 py-8">Belum ada jadwal.</div>
-  @endif
-</div>
 
   </section>
 </div>

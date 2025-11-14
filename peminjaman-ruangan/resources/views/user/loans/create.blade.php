@@ -22,7 +22,7 @@
           <input 
             type="date" 
             name="tanggal" 
-            value="{{ old('tanggal') }}" 
+            value="{{ request('tanggal') ?? old('tanggal') }}"
             class="w-full rounded-2xl bg-neutral-300/80 px-4 py-3" 
             required
           >

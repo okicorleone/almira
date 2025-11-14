@@ -30,7 +30,7 @@
               <td>{{ $loan->jumlah_peserta ?? '-' }}</td>
               <td>{{ $loan->jam ?? '-' }}</td>
               <td>{{ $loan->jam_selesai ?? '-' }}</td>
-              <td>{{ $loan->list_kebutuhan ?? '-' }}</td>
+              <td>{{ $loan->list_kebutuhan ?? '-' }}</td> 
               <td>
                 @if($loan->status == 'approved')
                   <span class="status-pill status-yes">Disetujui</span>

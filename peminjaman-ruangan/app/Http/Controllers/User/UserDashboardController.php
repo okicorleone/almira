@@ -18,8 +18,10 @@ class UserDashboardController extends Controller
         // ambil semua ruangan
         $rooms = Room::all();
 
-        // ambil jadwal sesuai filter
-        $loans = Loan::whereYear('tanggal', $year)
+
+        $loans = Loan::where('status', 'approved')
+            ->orderBy('tanggal', 'asc')
+            ->whereYear('tanggal', $year)
             ->whereMonth('tanggal', $month)
             ->when($roomId, fn($q) => $q->where('room_id', $roomId))
             ->get();

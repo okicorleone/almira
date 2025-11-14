@@ -15,6 +15,9 @@ class Booking extends Model
         'tanggal',
         'agenda',
         'jam',
+        'jam_selesai',
+        'jumlah_peserta',
+        'list_kebutuhan',
         'status',
         'created_at',
     ];

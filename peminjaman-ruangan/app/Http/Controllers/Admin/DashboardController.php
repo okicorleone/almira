@@ -70,9 +70,11 @@ class DashboardController extends Controller
         $availableRooms = Room::where('status', 'tersedia')->count();
         $pendingRequests = Booking::where('status', 'pending')->count();
         $rooms = Room::all();
+        $availableRoomList = Room::where('status', 'tersedia')->pluck('nama')->toArray();
+        $bookedRoomList = Room::where('status', 'booked')->pluck('nama')->toArray();
 
         return view('admin.dashboard', compact('recentBookings', 'pendingRequests',
-        'todayBookings', 'todayCount', 'monthCount', 'availableRooms', 'labels', 'data', 'query','month', 'year', 'room','rooms'));
+        'todayBookings', 'todayCount', 'monthCount', 'availableRooms', 'labels', 'data', 'query','month', 'year', 'room','rooms', 'availableRoomList', 'bookedRoomList'));
     }
 
     

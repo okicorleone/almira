@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Booking; // atau Loan jika kamu pakai model Loan
+use App\Models\Booking; 
 use App\Models\Room;
 use App\Models\Notification;
 
@@ -72,14 +72,25 @@ class LoanController extends Controller
 
     public function approve(\App\Models\Booking $loan)
     {
+        // Ubah status peminjaman jadi approved
         $loan->update(['status' => 'approved']);
 
+        // Ambil ruangan yang terkait
+        $room = $loan->room;
+
+        // Jika ruangan ditemukan dan masih tersedia, ubah jadi booked
+        if ($room && $room->status === 'tersedia') {
+            $room->update(['status' => 'booked']);
+            
+        }
+
+        // Kirim notifikasi ke user
         Notification::create([
             'user_id' => $loan->user_id,
-            'message' => "Booking kamu untuk ruangan {$loan->room->nama} telah disetujui.",
+            'message' => "Booking kamu untuk ruangan {$room->nama} telah disetujui dan ruangan kini berstatus 'booked'.",
         ]);
 
-        return redirect()->route('admin.loans.index')->with('success', 'Pinjaman berhasil diterima');
+        return redirect()->route('admin.loans.index')->with('success', 'Peminjaman disetujui dan ruangan otomatis di-booked.');
     }
 
     public function reject(\App\Models\Booking $loan)

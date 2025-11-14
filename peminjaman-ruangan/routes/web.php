@@ -32,7 +32,7 @@ Route::get('/', function () {
 });
 
 // ================== USER ROUTES ==================
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','weekday'])->group(function () {
     // Dashboard user
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 
