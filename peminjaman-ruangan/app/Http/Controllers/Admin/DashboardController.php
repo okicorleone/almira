@@ -39,15 +39,7 @@ class DashboardController extends Controller
             ->when($room, fn($q) => $q->where('rooms.id', $room))
             ->groupBy('rooms.id')
             ->orderBy('rooms.id');
-        // $query = Booking::query()
-        //     ->select('room_id', DB::raw('COUNT(*) as total'))
-        //     ->when($year, fn($q) => $q->whereYear('tanggal', $year))
-        //     ->when($month, fn($q) => $q->whereMonth('tanggal', $month))
-        //     ->when($room, fn($q) => $q->where('room_id', $room))
-        //     ->groupBy('room_id')
-        //     ->with('room')
-        //     ->orderBy('room_id');
-        
+
         $result = $query->get();
             // fallback contoh ketika belum ada data
             $labels = $rooms->map(fn($row) => $row->nama ?? 'Unknown');
@@ -67,14 +59,20 @@ class DashboardController extends Controller
 
         $todayCount = Booking::whereDate('created_at', Carbon::today())->count();
         $monthCount = Booking::whereMonth('tanggal', Carbon::now()->month)->count();
-        $availableRooms = Room::where('status', 'tersedia')->count();
         $pendingRequests = Booking::where('status', 'pending')->count();
         $rooms = Room::all();
         $availableRoomList = Room::where('status', 'tersedia')->pluck('nama')->toArray();
         $bookedRoomList = Room::where('status', 'booked')->pluck('nama')->toArray();
+        $bookedToday = Booking::whereDate('tanggal', today())
+            ->where('status', 'approved')
+            ->pluck('room_id');
+
+        $availableRooms = Room::where('status', 'tersedia')
+            ->whereNotIn('id', $bookedToday)
+            ->count();
 
         return view('admin.dashboard', compact('recentBookings', 'pendingRequests',
-        'todayBookings', 'todayCount', 'monthCount', 'availableRooms', 'labels', 'data', 'query','month', 'year', 'room','rooms', 'availableRoomList', 'bookedRoomList'));
+        'todayBookings', 'todayCount', 'monthCount', 'availableRooms', 'labels', 'data', 'query','month', 'year', 'room','rooms', 'availableRoomList', 'bookedRoomList', 'bookedToday'));
     }
 
     

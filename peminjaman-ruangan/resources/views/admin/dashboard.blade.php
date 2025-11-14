@@ -120,7 +120,7 @@
     </div>
     <div class="kpi-tile">
       <div class="kpi-value">{{ $availableRooms }}</div>
-      <div class="kpi-label">Ruangan Tersedia</div>
+      <div class="kpi-label">Ruangan Tersedia Hari Ini</div>
     </div>
     <div class="kpi-tile">
       <div class="kpi-value">{{ $pendingRequests }}</div>

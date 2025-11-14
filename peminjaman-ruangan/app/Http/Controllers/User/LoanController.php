@@ -26,7 +26,23 @@ class LoanController extends Controller{
             'list_kebutuhan' => 'nullable|string',
             'status' => 'in:pending,approved,rejected',
         ]);
+        // Cek apakah ruangan sudah dibooking pada tanggal & jam yang sama
+        $conflict = Loan::where('room_id', $request->room_id)
+            ->where('tanggal', $request->tanggal)
+            ->where(function($q) use ($request) {
+                $q->where(function($query) use ($request) {
+                    $query->where('jam', '<', $request->jam_selesai)
+                        ->where('jam_selesai', '>', $request->jam);
+                });
+            })
+            ->whereIn('status', ['pending', 'approved']) // pending dan approved dianggap bentrok
+            ->exists();
 
+        if ($conflict) {
+            return back()
+                ->withErrors(['room_id' => 'Ruangan sudah dibooking pada tanggal & jam ini.'])
+                ->withInput();
+        }
         $loan= Loan::create([
             'user_id'    => auth()->id(),
             'room_id'    => $request->room_id,

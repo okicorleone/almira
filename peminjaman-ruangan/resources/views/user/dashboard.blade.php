@@ -90,7 +90,9 @@
             @click="window.location.href='{{ route('loans.create') }}?tanggal={{ $date->toDateString() }}'"
           >
             {{-- Tanggal --}}
-            <span class="cal-date">{{ $i }}</span>
+            <span class="cal-date
+            @if($date->isToday()) bg-blue-600 text-white font-bold px-1 py-0.025 rounded-full @endif"
+            >{{ $i }}</span>
 
             {{-- Indikator ada kegiatan --}}
             @if($loanToday->count() > 0)
