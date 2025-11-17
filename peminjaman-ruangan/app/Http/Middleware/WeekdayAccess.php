@@ -14,7 +14,7 @@ class WeekdayAccess
         $dayOfWeek = Carbon::now()->dayOfWeek; 
 
         // Jika hari Sabtu (6) atau Minggu (0), tolak akses
-        if ($dayOfWeek === 0 || $dayOfWeek === 1) {
+        if ($dayOfWeek === 0 || $dayOfWeek === 6) {
             return response()->view('errors.weekend', [], 403);
         }
 
